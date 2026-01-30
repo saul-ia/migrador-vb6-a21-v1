@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VB6 Migrator Kit v1 - Architecture Blueprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #030712;
+            color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+        }
+
+        .neon-border {
+            position: relative;
+        }
+
+        .neon-border::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            border-radius: 21px;
+            background: linear-gradient(45deg, #3b82f6, #ec4899, #8b5cf6, #3b82f6);
+            background-size: 300% 300%;
+            animation: gradient-border 6s ease infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes gradient-border {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        .diagram-container {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            border: 1px solid #1e293b;
+        }
+
+        .terminal-window {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .terminal-header {
+            background-color: #2d2d2d;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background-color: #ff5f56;
+        }
+
+        .dot-yellow {
+            background-color: #ffbd2e;
+        }
+
+        .dot-green {
+            background-color: #27c93f;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            color: #d4d4d4;
+            font-size: 14px;
+        }
+
+        .cmd-prompt {
+            color: #4ade80;
+        }
+
+        .cmd-path {
+            color: #60a5fa;
+        }
+
+        .cmd-input {
+            color: #e2e8f0;
+        }
+
+        .cmd-output {
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .cmd-success {
+            color: #4ade80;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-slate-800/50 rounded-none h-16 flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-rocket text-blue-500 text-xl"></i>
+                <span class="font-bold text-xl tracking-tight">VB6<span class="text-pink-500">Migrator</span></span>
+            </div>
+            <div class="hidden md:flex gap-6 text-sm font-medium text-slate-400">
+                <a href="#directory" class="hover:text-white transition-colors">Estructura</a>
+                <a href="#agents" class="hover:text-white transition-colors">Agentes</a>
+                <a href="#hierarchy" class="hover:text-white transition-colors text-pink-400"><i
+                        class="fa-solid fa-sitemap"></i> Jerarquía</a>
+                <a href="#simulation" class="hover:text-white transition-colors text-green-400"><i
+                        class="fa-solid fa-play"></i> Simulación</a>
+                <a href="#table" class="hover:text-white transition-colors text-yellow-400"><i
+                        class="fa-solid fa-table"></i> Ejecución</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="pt-32 pb-20 px-6 relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-900/0 to-slate-900/0">
+        </div>
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <h1 class="text-6xl md:text-8xl font-bold mb-6 tracking-tight text-white">
+                Legacy to <span
+                    class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-pink-500">Future</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-3xl mx-auto mb-10">
+                Kit de Migración Automatizada: VB6+Access ➝ Angular 21 + Node.js + SQLite.
+                <br>Documentación técnica para la generación del <code>antigravity-kit/migrador</code>.
+            </p>
+        </div>
+    </header>
+
+    <!-- 1. Directory Structure -->
+    <section id="directory" class="py-20 px-6 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="section-title text-center">1. Estructura de Directorios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="glass-panel p-8 neon-border">
+                    <h3 class="text-xl font-bold mb-6 text-white"><i
+                            class="fa-regular fa-folder-open text-blue-500 mr-2"></i> Árbol de Archivos Generado</h3>
+                    <div class="font-mono text-sm leading-relaxed text-slate-300">
+                        <pre>
+antigravity-kit/
+└── migrador/
+    ├── .agent/
+    │   ├── agents/
+    │   │   ├── migration-orchestrator.md
+    │   │   ├── vb6-analyst.md
+    │   │   ├── angular-architect.md
+    │   │   ├── backend-engineer.md
+    │   │   └── data-migrator.md
+    │   ├── skills/
+    │   │   ├── legacy-decoding/SKILL.md
+    │   │   ├── modern-stack/SKILL.md
+    │   │   ├── db-transform/SKILL.md
+    │   │   └── quality-gates/SKILL.md
+    │   ├── workflows/
+    │   │   ├── audit-legacy.md
+    │   │   ├── migrate-ui.md
+    │   │   ├── migrate-db.md
+    │   │   └── orchestrate-migration.md
+    │   ├── rules/
+    │   │   └── MIGRATION_RULES.md
+    │   └── scripts/
+    │       ├── vb6_parser.py
+    │       ├── schema_converter.py
+    │       └── component_scaffolder.py
+    ├── AGENT_FLOW.md
+    ├── ARCHITECTURE.md
+    └── vb6_migrador_v1.html
+</pre>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center space-y-6">
+                    <p class="text-slate-400">Esta estructura ya ha sido generada en tu sistema. Cada archivo tiene un
+                        propósito único en la cadena de montaje de software.</p>
+
+                    <div class="p-6 bg-slate-800/50 rounded-xl border-l-4 border-blue-500">
+                        <h4 class="font-bold text-white mb-2">Punto de Entrada</h4>
+                        <p class="text-sm text-slate-400">Todo el sistema se gobierna desde <code>.agent/</code>. No
+                            mezclar con el código fuente de la aplicación a migrar.</p>
+                    </div>
+                    <div class="p-6 bg-slate-800/50 rounded-xl border-l-4 border-pink-500">
+                        <h4 class="font-bold text-white mb-2">Aislamiento de Contexto</h4>
+                        <p class="text-sm text-slate-400">La carpeta <code>skills/legacy-decoding</code> es crítica:
+                            contiene el conocimiento "muerto" de VB6 que los LLMs modernos a veces olvidan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Hierarchy -->
+    <section id="hierarchy" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="section-title text-center">2. Jerarquía de Encapsulamiento</h2>
+            <p class="text-center text-slate-400 mb-12">Cómo las capas superiores gobiernan a las inferiores.</p>
+
+            <div class="glass-panel p-8">
+                <div class="mermaid diagram-container">
+                    graph TD
+                    subgraph "L0: Constitución (Inmutable)"
+                    Rules[📜 RULES]
+                    noteRules[Define 'strict: true', 'no any', 'WAL mode']
+                    Rules -.-> Workflows
+                    Rules -.-> Agents
+                    end
+
+                    subgraph "L1: Procesos (Orquestación)"
+                    Workflows[🔄 WORKFLOWS]
+                    noteWF[Define pasos secuenciales: 1->2->3]
+                    Workflows --> Agents
+                    end
+
+                    subgraph "L2: Inteligencia (Razonamiento)"
+                    Agents[🤖 AGENTS]
+                    noteAgents[Piensa, decide y usa herramientas]
+                    Agents --> Skills
+                    end
+
+                    subgraph "L3: Conocimiento (Know-How)"
+                    Skills[📚 SKILLS]
+                    noteSkills[Patrones VB6, Trucos CSS, Queries]
+                    end
+
+                    subgraph "L4: Ejecución (Determinista)"
+                    Scripts[🚀 SCRIPTS]
+                    noteScripts[Python/Bash: Mover ficheros, Parsear texto]
+                    Agents --> Scripts
+                    Skills -.-> Scripts
+                    end
+
+                    style Rules fill:#ef4444,stroke:#991b1b,color:white
+                    style Workflows fill:#f97316,stroke:#c2410c,color:white
+                    style Agents fill:#a855f7,stroke:#7e22ce,color:white
+                    style Skills fill:#3b82f6,stroke:#1d4ed8,color:white
+                    style Scripts fill:#10b981,stroke:#047857,color:white
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Simulation -->
+    <section id="simulation" class="py-20 px-6 bg-slate-900/30">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="section-title text-center">3. Simulación de Ejecución</h2>
+            <p class="text-center text-slate-400 mb-12">Paso a paso: Qué comando ejecuta el usuario y qué ocurre por
+                debajo.</p>
+
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                </div>
+                <div class="terminal-body space-y-4">
+                    <!-- Step 1 -->
+                    <div>
+                        <span class="cmd-prompt">user@dev</span>:<span class="cmd-path">~/project</span>$ <span
+                            class="cmd-input">/orchestrate-migration</span>
+                        <span class="cmd-output">🤖 <span class="text-purple-400">Migration Orchestrator</span>
+                            initialized. Loading Master Plan...</span>
+                        <span class="cmd-output">Running Phase 1: Audit Legacy Codebase...</span>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="pl-4 border-l-2 border-slate-700">
+                        <span class="cmd-output text-xs uppercase tracking-widest text-slate-500">Sub-Workflow
+                            Triggered: /audit</span>
+                        <span class="cmd-output">🤖 <span class="text-blue-400">VB6 Analyst</span> activado. Scanning
+                            3,400 files...</span>
+                        <span class="cmd-output">
+                            &nbsp;&nbsp;> Executing <code>python vb6_parser.py src/vb6/*.frm</code><br>
+                            &nbsp;&nbsp;> Found 45 Forms, 12 Modules, 3 Classes.<br>
+                            &nbsp;&nbsp;> Identifying OCX dependencies: 'MSCOMCTL.OCX' detected.
+                        </span>
+                        <span class="cmd-success">✓ Audit Report Generated: AUDIT_REPORT.md</span>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div>
+                        <span class="cmd-prompt">user@dev</span>:<span class="cmd-path">~/project</span>$ <span
+                            class="cmd-input">/migrate-db --confirm</span>
+                        <span class="cmd-output">Running Phase 2: Database Migration...</span>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="pl-4 border-l-2 border-slate-700">
+                        <span class="cmd-output text-xs uppercase tracking-widest text-slate-500">Sub-Workflow
+                            Triggered: /migrate-db</span>
+                        <span class="cmd-output">🤖 <span class="text-orange-400">Data Migrator</span> activado. Reading
+                            'biblioteca.mdb'...</span>
+                        <span class="cmd-output">
+                            &nbsp;&nbsp;> Executing <code>mdb-export</code> to 'data/csv/'<br>
+                            &nbsp;&nbsp;> Generating `schema.prisma` mapping 'Currency' to 'Decimal'.<br>
+                            &nbsp;&nbsp;> Running `prisma db push` (SQLite WAL mode).<br>
+                            &nbsp;&nbsp;> Seeding 15,000 records...
+                        </span>
+                        <span class="cmd-success">✓ Database Migrated. 15,000 rows transferred. Integrity: 100%.</span>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div>
+                        <span class="cmd-prompt">user@dev</span>:<span class="cmd-path">~/project</span>$ <span
+                            class="cmd-input">/migrate-ui "frmLogin.frm"</span>
+                        <span class="cmd-output">Running Phase 3: Logic & UI Migration...</span>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="pl-4 border-l-2 border-slate-700">
+                        <span class="cmd-output text-xs uppercase tracking-widest text-slate-500">Sub-Workflow
+                            Triggered: /migrate-ui</span>
+                        <span class="cmd-output">🤖 <span class="text-blue-400">VB6 Analyst</span> activado. Extracting
+                            Logic from frmLogin...</span>
+                        <span class="cmd-output">&nbsp;&nbsp;> Found Event: <code>cmdLogin_Click</code> (calls
+                            <code>AuthUser</code>)</span>
+
+                        <div class="mt-2 text-pink-400">🤖 Angular Architect activado.</div>
+                        <span class="cmd-output">&nbsp;&nbsp;> Generating `login.component.ts` (Signal based
+                            state).</span>
+                        <span class="cmd-output">&nbsp;&nbsp;> Generating `login.component.html` (Material
+                            Design).</span>
+
+                        <div class="mt-2 text-green-400">🤖 Backend Engineer activado.</div>
+                        <span class="cmd-output">&nbsp;&nbsp;> Generating `AuthController.ts` and
+                            `AuthService.ts`.</span>
+
+                        <span class="cmd-success">✓ Component & API Generated.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Detailed Table -->
+    <section id="table" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="section-title text-center">4. Tabla Maestra de Ejecución</h2>
+            <div class="overflow-x-auto glass-panel">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead class="bg-slate-800 text-slate-200">
+                        <tr>
+                            <th class="p-4 border-b border-slate-700"># Orden</th>
+                            <th class="p-4 border-b border-slate-700">Tipo</th>
+                            <th class="p-4 border-b border-slate-700">Nombre</th>
+                            <th class="p-4 border-b border-slate-700">Rol / Responsabilidad</th>
+                            <th class="p-4 border-b border-slate-700">Dependencias</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-400">
+                        <!-- L0: Rules -->
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">00.0</td>
+                            <td class="p-4"><span
+                                    class="bg-red-900/50 text-red-200 px-2 py-1 rounded text-xs">Rule</span></td>
+                            <td class="p-4 font-bold">MIGRATION_RULES.md</td>
+                            <td class="p-4">Establece la ley (Strict Types, WAL Mode, Signals).</td>
+                            <td class="p-4">Ninguna (Es la base)</td>
+                        </tr>
+
+                        <!-- L1: Main Workflow -->
+                        <tr>
+                            <td class="p-4 font-mono text-white">01.0</td>
+                            <td class="p-4"><span
+                                    class="bg-purple-900/50 text-purple-200 px-2 py-1 rounded text-xs">Workflow</span>
+                            </td>
+                            <td class="p-4 font-bold">/orchestrate-migration</td>
+                            <td class="p-4">Workflow Maestro. Orquesta Auditar -> DB -> UI.</td>
+                            <td class="p-4">Req: Todo el Kit</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">01.1</td>
+                            <td class="p-4"><span
+                                    class="bg-purple-900/20 text-purple-200 px-2 py-1 rounded text-xs">Agent</span></td>
+                            <td class="p-4">migration-orchestrator</td>
+                            <td class="p-4">Project Manager. Ejecuta el workflow maestro.</td>
+                            <td class="p-4">Req: task.md</td>
+                        </tr>
+
+                        <!-- Phase 1: Audit -->
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">02.0</td>
+                            <td class="p-4"><span
+                                    class="bg-purple-900/50 text-purple-200 px-2 py-1 rounded text-xs">Workflow</span>
+                            </td>
+                            <td class="p-4">/audit-legacy</td>
+                            <td class="p-4">Escaneo inicial para dimensionar el esfuerzo.</td>
+                            <td class="p-4">Req: Código Fuente</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">02.1</td>
+                            <td class="p-4"><span
+                                    class="bg-blue-900/50 text-blue-200 px-2 py-1 rounded text-xs">Agent</span></td>
+                            <td class="p-4">vb6-analyst</td>
+                            <td class="p-4">Lee el código fuente VB6.</td>
+                            <td class="p-4">Req: Skills/Legacy-Decoding</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">02.2</td>
+                            <td class="p-4"><span
+                                    class="bg-yellow-900/50 text-yellow-200 px-2 py-1 rounded text-xs">Skill</span></td>
+                            <td class="p-4">legacy-decoding</td>
+                            <td class="p-4">Conocimiento sobre sintaxis VB6 y OCX.</td>
+                            <td class="p-4">-</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">02.3</td>
+                            <td class="p-4"><span
+                                    class="bg-green-900/50 text-green-200 px-2 py-1 rounded text-xs">Script</span></td>
+                            <td class="p-4">vb6_parser.py</td>
+                            <td class="p-4">Extrae controles y coordenadas de .frm.</td>
+                            <td class="p-4">Invocado por vb6-analyst</td>
+                        </tr>
+
+                        <!-- Phase 2: DB -->
+                        <tr>
+                            <td class="p-4 font-mono text-white">03.0</td>
+                            <td class="p-4"><span
+                                    class="bg-purple-900/50 text-purple-200 px-2 py-1 rounded text-xs">Workflow</span>
+                            </td>
+                            <td class="p-4">/migrate-db</td>
+                            <td class="p-4">Mueve los datos primero (Data First Strategy).</td>
+                            <td class="p-4">Req: .mdb file</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">03.1</td>
+                            <td class="p-4"><span
+                                    class="bg-blue-900/50 text-blue-200 px-2 py-1 rounded text-xs">Agent</span></td>
+                            <td class="p-4">data-migrator</td>
+                            <td class="p-4">Genera Prisma Schema y Seed Scripts.</td>
+                            <td class="p-4">Req: Skills/Db-Transform</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">03.2</td>
+                            <td class="p-4"><span
+                                    class="bg-yellow-900/50 text-yellow-200 px-2 py-1 rounded text-xs">Skill</span></td>
+                            <td class="p-4">db-transform</td>
+                            <td class="p-4">Mapping de tipos Access -> SQLite.</td>
+                            <td class="p-4">-</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono text-white">03.3</td>
+                            <td class="p-4"><span
+                                    class="bg-green-900/50 text-green-200 px-2 py-1 rounded text-xs">Script</span></td>
+                            <td class="p-4">schema_converter.py</td>
+                            <td class="p-4">Convierte tipos de datos automáticamente.</td>
+                            <td class="p-4">Invocado por data-migrator</td>
+                        </tr>
+
+                        <!-- Phase 3: UI & Logic -->
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">04.0</td>
+                            <td class="p-4"><span
+                                    class="bg-purple-900/50 text-purple-200 px-2 py-1 rounded text-xs">Workflow</span>
+                            </td>
+                            <td class="p-4">/migrate-ui</td>
+                            <td class="p-4">Se ejecuta N veces (una por formulario).</td>
+                            <td class="p-4">Req: DB Migrada</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">04.1</td>
+                            <td class="p-4"><span
+                                    class="bg-blue-900/50 text-blue-200 px-2 py-1 rounded text-xs">Agent</span></td>
+                            <td class="p-4">angular-architect</td>
+                            <td class="p-4">Crea Componentes, HTML y CSS.</td>
+                            <td class="p-4">Req: Skills/Modern-Stack</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">04.1</td>
+                            <td class="p-4"><span
+                                    class="bg-blue-900/50 text-blue-200 px-2 py-1 rounded text-xs">Agent</span></td>
+                            <td class="p-4">backend-engineer</td>
+                            <td class="p-4">Crea Endpoints API REST para ese Form.</td>
+                            <td class="p-4">Paralelo a Angular</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">04.2</td>
+                            <td class="p-4"><span
+                                    class="bg-yellow-900/50 text-yellow-200 px-2 py-1 rounded text-xs">Skill</span></td>
+                            <td class="p-4">modern-stack</td>
+                            <td class="p-4">Patrones Angular (Signals) y Node (Layered).</td>
+                            <td class="p-4">-</td>
+                        </tr>
+                        <tr class="bg-slate-900/50">
+                            <td class="p-4 font-mono text-white">04.3</td>
+                            <td class="p-4"><span
+                                    class="bg-green-900/50 text-green-200 px-2 py-1 rounded text-xs">Script</span></td>
+                            <td class="p-4">component_scaffolder.py</td>
+                            <td class="p-4">Crea carpetas y ficheros vacíos.</td>
+                            <td class="p-4">Invocado por angular-architect</td>
+                        </tr>
+
+                        <!-- Verification -->
+                        <tr>
+                            <td class="p-4 font-mono text-white">05.0</td>
+                            <td class="p-4"><span
+                                    class="bg-yellow-900/50 text-yellow-200 px-2 py-1 rounded text-xs">Skill</span></td>
+                            <td class="p-4">quality-gates</td>
+                            <td class="p-4">Valida que el código cumpla los estándares.</td>
+                            <td class="p-4">Usado al final de cada paso</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-800 text-center text-slate-500 text-sm">
+        <p>&copy; 2026 Antigravity Migration Systems. Generado automáticamente por Orchestrator Agent.</p>
+    </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            fontFamily: 'Space Grotesk'
+        });
+    </script>
+</body>
+
+</html>
