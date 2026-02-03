@@ -1,0 +1,109 @@
+<html>
+
+<head>
+</head>
+<body>
+
+<p>&nbsp;</p>
+<p><b><font size="5">Indice</font></b></p>
+<p><b>1) <a href="#buscar,">Como buscar un libro </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</b></p>
+<p><b>2) <a href="#la tecla prestar">Como prestar un libro</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</b></p>
+<p><b>3) <a href="#devuelve el libro">Como registrar una devolución</a></b></p>
+<p><b>4) <a href="#socios y registrarlo">No es socio, ¿Como registrarlo?</a></b></p>
+<p><b>5) <a href="#baja del registro de socios">Dar de baja un socio </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</b></p>
+<p><b>6) <a href="#datos con los libros">Ingresar un nuevo libro </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</b></p>
+<p><b>7) <a href="#adeuda algun libro">Como saber si el socio debe libros</a></b></p>
+<p><b>8) <a href="#cambiar la password">Como cambiar la contraseña&nbsp; </a>
+</b></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><b>&nbsp;Los libros estan numerados con un codigo en una etiqueta adherida a 
+su lomo, ese es el IdLibro.&nbsp; Este numero lo genera el sistema, no se repite 
+e identifica un unico volumen.</b></p>
+<p><b>El libro ademas tiene su titulo,&nbsp; y su autor (Apellido y nombre) con 
+cualquiera de estos datos podemos buscar el libro.</b></p>
+<p><b>Para eso, presionamos la pestaña de libros y alli <a name="buscar,">
+buscar,</a> se abrira un formulario con la tecla buscar habilitada, al presionar 
+esta tecla, se abrira un subformuario, donde se nos permitira ingresar para la 
+busqueda, uno y solo uno de los datos, el IdLibro, ó las primeras letras del 
+titulo, ó las primeras letras del apellido del autor. Si ingresamos mas de un 
+dato, el sistema de busqueda marcara error.</b></p>
+<p><b>Las coincidencias con la busqueda, apareceran en un listado, alli, 
+seleccionamos la fila del libro que buscamos, y los datos apareceran llenando 
+los cuadros arriba, si esta disponible, se habilitara la tecla de prestar, si no 
+lo está, aparecera el socio que tiene el volumen, con la fecha de prestamo, la 
+fecha calculada de devolucion y la cantidad de dias por los cuales se le prestò 
+el libro. Esto nos dara una idea de cuando estará el libro a disposicion, y en 
+caso de que esté pasado de la fecha, nos permitira conocer la direccion para 
+enviarle una carta reclamandole la devolucion, o un telefono para hacerlo 
+telefónicamente.</b></p>
+<p><b>Cuando el socio <a name="devuelve el libro">devuelve el libro</a>, lo 
+buscamos de la misma forma, y presionamos devolucion, que nos registrará que el 
+libro esta ya disponible para ser prestado nuevamente.</b></p>
+<p><b>Si el libro esta disponible, entonces presionamos
+<a name="la tecla prestar">la tecla prestar</a>, que nos pasara al formulario de 
+confirmación del socio y final registro del préstamo. Se le solicita al socio su 
+numero de socio (que se le dará cuando se inscriba) y su apellido. Si ambos 
+datos son correctos, entonces ponemos la cantidad de días por los cuales se le 
+prestara el libro y registramos la operación.</b></p>
+<p><b>Si el socio dio datos erroneos, seran pedidos estos datos nuevamante, y si 
+el socio dio datos correctos, pero <a name="adeuda algun libro">adeuda algun 
+libro</a> (no importa si la fecha esta aun vigente) entonces aparecera un 
+listado con el libro prestado y no podra sacar otro hasta la devolución del 
+primero. (si puede, leerlo en los recintos a tal fin), para lo cual, dejara su 
+documento hasta que reintegre el libro que solicito para leer.</b></p>
+<p><b><a name="Si esta persona no es socio">Si esta persona no es socio</a>, y 
+quiere retirar un libro, entonces se debe pasar al formulario de
+<a name="socios y registrarlo">socios y registrarlo</a> primero, para lo cual , 
+ingresando al formulario de socios, ponemos buscar, y abajo la tecla nobuscar, 
+que nos permitira ingresar un nuevo socio.&nbsp; Se le dara un numero de socio y 
+se le tomaran los datos para localizarlo, los cuales son todos requeridos. El 
+socio nuevo será valido, no bien se confirmen los datos, lo cual se puede hacer 
+mediante una llamada al telefono que dió, o al telefono de un vecino que 
+confirme que su domicilio y nombre son correctos. (Es conveniente no guardar el 
+registro, hasta haber hecho la llamada telefonica correspondiente, Pero si ya se 
+registro y&nbsp; resulta que el personaje es ficticio, entonces se lo da de
+<a name="baja del registro de socios">baja del registro de socios</a>.&nbsp; 
+Esto se hace, ingresando al registro de socios, buscar por el Id o el apellido 
+dado, y una vez seleccionado en la lista, aparecera las tecla para borrar 
+confirmamos y listo</b></p>
+<p><b>Para el llenado de la base de <a name="datos con los libros">datos con los 
+libros</a>, se puede hacer con el comando de cargar libros, que permite el 
+ingreso de un nuevo volumen y le genera su numero de IdLibro, y el ingreso del 
+titulo y del autor (Apellido y nombre).</b></p>
+<p><b>Tambien se puede hacer, y resulta mas practico para una carga masiva de 
+volumenes, directamente desde la base de datos, para lo cual, se debe verificar 
+que no este abierto ningun otro formulario, y se ingresa en a pestaña de
+<a name="base de datos,">base de datos,</a> alli aparece el icono al cual 
+hacemos doble click para ingresar a la misma.</b></p>
+<p><b>Luego de abierta la base de datos, Inicia en&nbsp; formulario de libros, 
+donde mediante el botoncito &gt;* que esta abajo, se posiciona en un nuevo registro 
+para ingresar los datos.&nbsp; Se ingresan los datos, y se cierra la base, 
+quedando los registros guardados.&nbsp; Se debe cerrar el formulario de base de 
+datos antes de volver a operar con los otros formularios</b></p>
+<p><b>Para <a name="cambiar la password">cambiar la password</a> (contraseña), 
+en la base de datos, se sale de formulario y se va a vista de tablas, alli se 
+abre la tabla &quot;clave&quot; y se ingresa la nueva contraseña, es conveniente el uso de 
+palabras sin ñ ni acentos, ya que son fáciles de que generen errores. Una vez 
+ingresada la contraseña, cierra la base de datos y el formulario, y la prueba 
+para ver si la acepto correctamente, Recuerde que una vez que cierre el 
+programa, si olvido la contraseña, o hubo algun error,&nbsp; no podra ingresar 
+de nuevo.</b></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

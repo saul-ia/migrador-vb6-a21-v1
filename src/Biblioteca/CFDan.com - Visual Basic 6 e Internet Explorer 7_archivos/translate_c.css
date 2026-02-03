@@ -1,0 +1,101 @@
+/* AUTHOR */
+
+@import url("https://translate.googleusercontent.com/translate_c?depth=1&hl=es&pok=1&prev=search&rurl=translate.google.com.ar&sl=en&u=http://www.cfdan.com/css/twitter.css&usg=ALkJrhj_WZlEQ-aWKcNDAPeJiCQfTSD3Aw") ;
+
+body {margin: 0; padding: 0; text-align: center; font-size: 12px; min-width: 760px; background: #4386ce url(http://www.blogblog.com/thisaway_blue/bg_body.gif) repeat-x left top; font-family: helvetica,arial,verdana,"trebuchet ms",sans-serif; color: #204063}
+div.code {border: 1px solid #d3d3d3; padding: 5px; font-size: 11px; line-height: 6px; font-family: icon}
+div.code pre {font-size: 11px; line-height: 6px; font-family: icon}
+.tools {padding: 4px; text-align: right}
+a:link, a:active {color: #000000; font-size: 12px}
+a:visited {color: #000000; font-size: 12px}
+a:hover {color: #02a7ca; text-decoration: none; font-size: 12px}
+blockquote {margin: 0; padding: 0 10px 0 10px; border-left: 6px solid #d8e7f7; border-right: 6px solid #d8e7f7; color: #477fba}
+code {color: #809eba}
+hr {display: none}
+#wrapper {margin: 0 auto; width: 760px; text-align: left}
+#cfdan-header {padding-bottom: 15px; background: url(http://www.blogblog.com/thisaway_blue/bg_header_bottom.gif) no-repeat left bottom}
+#cfdan-header div {background: #204063 url(http://www.blogblog.com/thisaway_blue/bg_header.gif) repeat-x left bottom}
+#main-wrapper {position: relative; width: 760px; background-color: #f6f6f6}
+#main-content {display: inline; float: left; margin: 0 0 0 3px; padding: 0; width: 553px}
+#content-wrapper {padding: 22px 0 0 0; background-color: #ffffff}
+.post {margin: 0 16px 14px 29px; padding: 0; border-bottom: 3px solid #d8e7f7}
+#comments {margin: 0 16px 14px 29px; padding: 10px; border: 1px solid #cedef0; background-color: #e4ecf5}
+#sidebar-wrapper {display: inline; float: right; margin: 0 3px 0 0; width: 199px; color: #1c4676; background-color: #ffffff}
+#sidebar {padding: 7px 5px 0 5px; background-color: #eeeeee}
+#profile-container {margin-bottom: 20px}
+#cfdan-footer {padding-top: 15px; background: url(http://www.blogblog.com/thisaway_blue/bg_footer_top.gif) no-repeat left top}
+#cfdan-footer div {background: #152e49 url(http://www.blogblog.com/thisaway_blue/bg_footer.gif) repeat-x left top}
+#cfdan-header h1 {margin: 0; padding: 26px 0 0 84px; color: #eef6fe; font-size: 16px; line-height: 25px; background: url(http://www.cfdan.com/images/cfmx.gif) no-repeat 16px 26px}
+h6.date-header {margin: 0; padding: 0 0 0 29px; font-size: 10px; text-transform: uppercase; color: #8facc8; background: url(http://www.blogblog.com/thisaway_blue/icon_date.gif) no-repeat 13px 0}
+.date-header span {margin: 0 0 0 5px; padding: 0 25px 0 25px; background: url(http://www.blogblog.com/thisaway_blue/bg_date.gif) no-repeat 0 0}
+h2.sidebar-title {padding-top: 1px; padding-left: 36px; margin-bottom: 0px; font-size: 14px; color: #809fbd; background: url(http://www.blogblog.com/thisaway_blue/icon_sidebar_heading.gif) no-repeat 0 45%}
+#profile-container h2.sidebar-title {color: #527595; background: url(http://www.blogblog.com/thisaway_blue/icon_sidebar_profileheading.gif) no-repeat 0 45%}
+.post h2.post-title {margin: 13px 0 0 0; padding: 0; font-size: 18px; color: #477fba}
+.post h2.post-title a:link, .post h2.post-title a:visited, .post h2.post-title a:active, .post h2.post-title a {margin: 13px 0 0 0; padding: 0; font-size: 18px; color: #477fba; text-decoration: underline}
+.post h2.post-title a:hover {margin: 13px 0 0 0; padding: 0; font-size: 18px; color: #477fba; text-decoration: none}
+#comments h4 {margin-top: 0; font-size: 16px}
+#cfdan-header p {margin: 0; padding: 7px 16px 0 84px; color: #eef6fe; font-size: 10px; font-weight: bold; line-height: 14px}
+.post-body div {font-size: 13px; line-height: 18px}
+.post-body blockquote {margin: 10px 0px}
+p.post-footer {font-size: 12px; color: #809fbd; text-align: right}
+p.post-footer em {display: block; float: left; text-align: left; font-style: normal}
+p.comment-data {font-size: 12px}
+.comment-body p {font-size: 12px; line-height: 17px}
+.deleted-comment {font-style: italic; color: #808080}
+#sidebar p {font-size: 12px; line-height: 17px; margin-bottom: 20px}
+#sidebar p.profile-textblock {clear: both; margin-bottom: 10px}
+.profile-link {text-align: left; font-size: 10px; padding-top: 20px; padding-left: 20px}
+a.profile-link {font-size: 12px}
+p#powered-by {margin: 0; padding: 0; display: none}
+#cfdan-footer p {margin: 0; padding: 0 0 15px 55px; color: #eef6fe; font-size: 10px; line-height: 14px; background: url(http://www.blogblog.com/thisaway_blue/icon_footer.gif) no-repeat 16px 0}
+.profile-data {font-size: 13px; line-height: 17px}
+a.comment-link {background: url(http://www.blogblog.com/thisaway_blue/icon_comment.gif) no-repeat 0 45%; padding-left: 14px}
+html > body a.comment-link {background: url(http://www.blogblog.com/thisaway_blue/icon_comment.gif) no-repeat 0 45%; padding-left: 14px}
+#cfdan-header h1 a {color: #eef6fe; text-decoration: none}
+#cfdan-header h1 a:hover {color: #b4c7d9}
+h3.post-title a {color: #477fba; text-decoration: none}
+h3.post-title a:hover {color: #2a5e95}
+.post-photo {padding: 3px; border: 1px solid #bdd4eb}
+.profile-img {display: inline}
+.profile-img img {float: left; margin: 0 5px 5px 0; padding: 2px; border: 1px solid #bdd4eb}
+.profile-data strong {display: block}
+.clear {clear: both; line-height: 0; height: 0}
+.blogrollmain {padding: 0 0 0 20px}
+.blogrollmain a, .blogrollmain a:link, .blogrollmain a:active, .blogrollmain:visited {font-size: 12px; font-family: arial; color: #000080; text-decoration: underline}
+.blogrollmain a:hover {text-decoration: none}
+form {padding: 0px; margin: 0px}
+pre {color: #b24d0a; line-height: 100%; font-size: 12px}
+small {color: #ff0000}
+div.post div.tags {background-image: url(http://www.cfdan.com/images/post/tags_back.gif); background-repeat: repeat-x; padding: 1px 0 1px 0px; font-size: 12px; color: #888888; margin: 0 10px 0 5px}
+div.post div.tags a:link {color: #464a5c; font-size: 12px; padding: 0 0 0 2px}
+div.post div.tags a:visited {color: #363a4c; font-size: 12px; padding: 0 0 0 2px}
+div.post div.postfooter a:link {color: #7c8094}
+div.post div.postfooter a:visited {color: #7c8094}
+div.comments {margin: 10px 10px 5px 10px; display: none}
+div.comments h3 {padding: 5px 0 0 0px}
+div.comments div.comment {margin: 2px 0 2px 0; padding: 10px; border: 1px solid #fafafa; border-left: 10px solid #ffffff}
+div.comments div.comment div.commentTitle {color: #888888}
+div.comments div.comment div.commentTitle a {color: #2b8bd9; font-weight: bold}
+div.comments div.comment div.commentMsg {color: #aa8888; padding: 5px 0 5px 0}
+div.odd {background-color: #eaeaea}
+div.commentForm {margin: 10px 10px 5px 100px; display: none}
+div.commentForm h3 {padding: 5px 0 0 0px}
+div.commentForm form {margin: 5px 0 5px 0}
+.req {color: #ff0000}
+.quot {color: #e0e0e0; font-weight: bold}
+#footer {margin: 5px 0 15px 0; font: 9px sans-serif; color: #555555}
+div.rhsBox {padding-top: 5px; margin-top: 5px}
+div.rhsBox small {line-height: 100%; color: #bbbbbb}
+.querySection {color: #138195; margin-left: 15px; margin-top: 25px; margin-right: 0px; margin-bottom: 25px; font-family: arial; font-size: 16px; font-weight: bold; border-bottom: 1px solid #c0c0c0}
+h3 {color: #138195; margin: 0 0 0 0px; padding: 0 0 0 0px; font-family: arial; font-size: 16px; font-weight: bold}
+h4 {padding: 2px 5px 2px 10px; background-color: #e7e7e7; color: #a8a8a8; font-family: Georgia,serif; font-size: 16px; border: 1px solid #e3e3e3; margin: 0px; font-weight: normal; line-height: 100%}
+h5 {padding: 2px 5px 2px 10px; background-color: #dfdbbf; color: #68521c; font-family: Georgia,serif; font-size: 13px; border: 1px solid #c9c49f; margin: 0px; font-weight: normal}
+textarea {border: 1px solid #cccccc}
+select {border: 1px solid #cccccc}
+th, td {vertical-align: top}
+.thError {background: #efefef url(http://www.cfdan.com/images/th_back_error.gif) repeat-x; background-color: #f9eeeb; color: #ea8d9c; font-weight: normal}
+label {color: #8a8d9c}
+.rhsBox ul {}
+div#listeningTo {padding-top: 10px; padding-bottom: 10px; padding-left: 10px; color: #000000}
+#songAndArtist {color: #008000; font-weight: bold; padding-top: 5px}
+#notPlaying {color: #ff0000; padding-top: 5px}
