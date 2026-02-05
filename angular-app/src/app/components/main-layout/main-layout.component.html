@@ -1,0 +1,44 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+        <mat-toolbar>
+            <span>Biblioteca</span>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="logout()" title="Cerrar Sesión">
+                <mat-icon fontSet="material-symbols-rounded">logout</mat-icon>
+            </button>
+        </mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item routerLink="/form1">
+                <mat-icon fontSet="material-symbols-rounded" matListItemIcon>library_books</mat-icon>
+                <span matListItemTitle>Gestión de Libros</span>
+            </a>
+            <a mat-list-item routerLink="/socios">
+                <mat-icon fontSet="material-symbols-rounded" matListItemIcon>people</mat-icon>
+                <span matListItemTitle>Gestión de Socios</span>
+            </a>
+            <a mat-list-item routerLink="/prestamos">
+                <mat-icon fontSet="material-symbols-rounded" matListItemIcon>assignment_return</mat-icon>
+                <span matListItemTitle>Préstamos</span>
+            </a>
+            <a mat-list-item href="#">
+                <mat-icon fontSet="material-symbols-rounded" matListItemIcon>exit_to_app</mat-icon>
+                <span matListItemTitle>Salir</span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+                *ngIf="isHandset$ | async">
+                <mat-icon fontSet="material-symbols-rounded">menu</mat-icon>
+            </button>
+            <span>Biblioteca - Migrated App</span>
+        </mat-toolbar>
+
+        <div class="content-padding">
+            <router-outlet></router-outlet>
+        </div>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

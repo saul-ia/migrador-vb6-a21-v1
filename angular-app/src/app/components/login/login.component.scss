@@ -1,0 +1,36 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e1e2e 0%, #2a2a40 100%);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.error {
+    color: #ff5252;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+mat-card-title {
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Outfit', sans-serif;
+    color: #a5b4fc;
+}

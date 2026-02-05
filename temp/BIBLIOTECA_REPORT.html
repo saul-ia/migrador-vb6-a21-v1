@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 VB6 Audit Report - Biblioteca</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --accent: #00d4ff;
+            --accent-secondary: #7b2cbf;
+            --success: #00ff88;
+            --warning: #ffcc00;
+            --danger: #ff4444;
+            --border: rgba(255,255,255,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header .meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,212,255,0.1);
+        }
+        
+        .card h2 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card h3 {
+            color: var(--text-primary);
+            margin: 1rem 0 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--bg-secondary);
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: rgba(0,212,255,0.05);
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-high { background: var(--danger); color: white; }
+        .badge-medium { background: var(--warning); color: black; }
+        .badge-low { background: var(--success); color: black; }
+        .badge-create { background: #22c55e; color: white; }
+        .badge-read { background: #3b82f6; color: white; }
+        .badge-update { background: #f59e0b; color: black; }
+        .badge-delete { background: #ef4444; color: white; }
+        
+        /* File Tree */
+        .file-tree {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .file-tree details {
+            margin-left: 1.5rem;
+        }
+        
+        .file-tree summary {
+            cursor: pointer;
+            padding: 0.25rem 0;
+            list-style: none;
+        }
+        
+        .file-tree summary::-webkit-details-marker {
+            display: none;
+        }
+        
+        .file-tree summary::before {
+            content: '📁 ';
+        }
+        
+        .file-tree details[open] > summary::before {
+            content: '📂 ';
+        }
+        
+        .file-item {
+            margin-left: 1.5rem;
+            padding: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .file-size {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        
+        /* Mermaid */
+        .mermaid {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+        
+        .tab:hover, .tab.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .header h1 { font-size: 1.8rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        /* Collapsible */
+        .collapsible {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .collapsible::after {
+            content: ' ▼';
+            font-size: 0.8rem;
+        }
+        
+        .collapsed::after {
+            content: ' ▶';
+        }
+        
+        /* Risk Indicator */
+        .risk-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        .risk-high { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+        .risk-medium { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
+        .risk-low { background: var(--success); box-shadow: 0 0 8px var(--success); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 VB6 Legacy Audit Report</h1>
+            <div class="meta">
+                <strong>Source:</strong> vb6-apps\Biblioteca<br>
+                <strong>Generated:</strong> 2026-02-05T06:54:29.979641<br>
+                <strong>Scanner Version:</strong> 2.0.0
+            </div>
+        </div>
+        
+        <!-- Summary Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">123</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Forms (.FRM)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">1</div>
+                <div class="stat-label">Modules (.BAS)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Classes (.CLS)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">111</div>
+                <div class="stat-label">UI Controls</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Migration Risks</div>
+            </div>
+        </div>
+        
+        <!-- Risks Section -->
+        <div class="card"><h2>✅ Risk Assessment</h2><p>No significant migration risks detected.</p></div>
+        
+        <!-- File Inventory -->
+        <div class="card">
+            <h2>📁 File Inventory</h2>
+            <div class="file-tree">
+        <details open>
+            <summary><strong>❓ Unknown</strong> (29 files) - Unknown</summary>
+        
+            <div class="file-item">
+                📄 Biblio.htm <span class="file-size">(6.4 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 CFDan.com - Visual Basic 6 e Internet Explorer 7.htm <span class="file-size">(183.2 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 a.htm <span class="file-size">(108 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 ca-pub-8668637444854833.js <span class="file-size">(179 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 dan_Shirt.htm <span class="file-size">(103 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iw_sprite.css <span class="file-size">(3.9 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c <span class="file-size">(10.5 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c.css <span class="file-size">(8.0 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c.htm <span class="file-size">(1.4 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c.js <span class="file-size">(3.9 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_002 <span class="file-size">(25.4 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_002.htm <span class="file-size">(1.1 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_002.js <span class="file-size">(3.8 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_003 <span class="file-size">(22.1 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_003.htm <span class="file-size">(1.1 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_003.js <span class="file-size">(46.3 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_004.js <span class="file-size">(92.5 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_c_005.js <span class="file-size">(4 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 translate_un.htm <span class="file-size">(307 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 translator.css <span class="file-size">(20.2 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 a.htm <span class="file-size">(108 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 ads.htm <span class="file-size">(701 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 osd.js <span class="file-size">(60.3 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 zrt_lookup.htm <span class="file-size">(9.7 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 ads.htm <span class="file-size">(701 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 ads.htm <span class="file-size">(701 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 expansion_embed.js <span class="file-size">(152.9 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 show_ads_impl.js <span class="file-size">(299.7 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 biblioteca.mdb <span class="file-size">(340.0 KB)</span>
+            </div></details>
+        <details open>
+            <summary><strong>⚙️ Executables</strong> (1 files) - Compiled executables</summary>
+        
+            <div class="file-item">
+                📄 Biblioteca..exe <span class="file-size">(284.0 KB)</span>
+            </div></details>
+        <details open>
+            <summary><strong>📦 Project</strong> (5 files) - Project and workspace files</summary>
+        
+            <div class="file-item">
+                📄 Biblioteca.vbp <span class="file-size">(1.8 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 Biblioteca.vbw <span class="file-size">(342 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 Bibliteca.vbw <span class="file-size">(235 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 Proyecto1.vbw <span class="file-size">(44 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 Registro de Inmobiliaria.vbw <span class="file-size">(234 bytes)</span>
+            </div></details>
+        <details open>
+            <summary><strong>🎨 Assets</strong> (52 files) - Image and icon assets</summary>
+        
+            <div class="file-item">
+                📄 CONS0231.ICO <span class="file-size">(766 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 CONS0233.ICO <span class="file-size">(766 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 CONS0234.ICO <span class="file-size">(766 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 CONS0235.ICO <span class="file-size">(766 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 FondoMDI.jpg <span class="file-size">(158.2 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 images.jpg <span class="file-size">(39.8 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 AU.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 BE.gif <span class="file-size">(1,003 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 blinklist.gif <span class="file-size">(260 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 BR.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 BY.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 CA.gif <span class="file-size">(1,005 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 CH.gif <span class="file-size">(998 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 CL.gif <span class="file-size">(211 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 comments.gif <span class="file-size">(929 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 delicious.gif <span class="file-size">(96 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 digg.gif <span class="file-size">(245 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 FR.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 furl.gif <span class="file-size">(954 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 GB.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 googlelogo_color_48x16dp.png <span class="file-size">(1.1 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 IE.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 IN.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 IT.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iws_c.png <span class="file-size">(157 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iws_e.png <span class="file-size">(148 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iws_n.png <span class="file-size">(158 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iws_s.png <span class="file-size">(158 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iws_w.png <span class="file-size">(148 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iw_c.png <span class="file-size">(160 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iw_e.png <span class="file-size">(95 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iw_n.png <span class="file-size">(94 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iw_s0.png <span class="file-size">(95 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 iw_w.png <span class="file-size">(94 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 JP.gif <span class="file-size">(596 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 LT.gif <span class="file-size">(631 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 MA.gif <span class="file-size">(1.1 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 MT.gif <span class="file-size">(855 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 MY.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 NL.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 NO.gif <span class="file-size">(1,004 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 NZ.gif <span class="file-size">(1,005 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 PT.gif <span class="file-size">(1,000 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 reddit.gif <span class="file-size">(1.0 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 RO.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 rss.gif <span class="file-size">(154 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 SE.gif <span class="file-size">(1,006 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 tags.gif <span class="file-size">(957 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 technorati.gif <span class="file-size">(162 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 TR.gif <span class="file-size">(995 bytes)</span>
+            </div><div class="file-item">... and 2 more files</div></details>
+        <details open>
+            <summary><strong>🖼️ Forms</strong> (14 files) - User interface forms and binary resources</summary>
+        
+            <div class="file-item">
+                📄 Copia de FRMLib.FRX <span class="file-size">(2.0 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 Form1.frm <span class="file-size">(484 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 Form2.frm <span class="file-size">(897 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 Form2.frx <span class="file-size">(3.0 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 FORM7.FRM <span class="file-size">(2.4 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 frmAYUDA.frm <span class="file-size">(1.7 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 FRMCLI.FRM <span class="file-size">(21.3 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 FRMCLI.FRX <span class="file-size">(2.8 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 FRMLIB.FRM <span class="file-size">(26.4 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 FRMLIB.frx <span class="file-size">(778 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 FrmPres.frm <span class="file-size">(7.2 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 FrmPres.frx <span class="file-size">(778 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 MDIForm1.frm <span class="file-size">(2.0 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 MDIForm1.frx <span class="file-size">(158.9 KB)</span>
+            </div></details>
+        <details open>
+            <summary><strong>📝 Documentation</strong> (20 files) - Text documentation and logs</summary>
+        
+            <div class="file-item">
+                📄 Copia de FRMLIB.log <span class="file-size">(115 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 El programa consta de dos partes.doc <span class="file-size">(27.5 KB)</span>
+            </div>
+            <div class="file-item">
+                📄 frmAYUDA.log <span class="file-size">(103 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_002.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_003.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_004.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_005.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_006.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_007.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_008.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_009.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_010.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_011.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_012.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_013.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_014.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_015.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_016.txt <span class="file-size">(48 bytes)</span>
+            </div>
+            <div class="file-item">
+                📄 a_017.txt <span class="file-size">(48 bytes)</span>
+            </div></details>
+        <details open>
+            <summary><strong>📄 Modules</strong> (1 files) - Standard code modules with functions and subroutines</summary>
+        
+            <div class="file-item">
+                📄 Module1.bas <span class="file-size">(2.1 KB)</span>
+            </div></details>
+        <details open>
+            <summary><strong>🗑️ Temporary</strong> (1 files) - Temporary and source control files</summary>
+        
+            <div class="file-item">
+                📄 MSSCCPRJ.SCC <span class="file-size">(506 bytes)</span>
+            </div></details></div>
+        </div>
+        
+        <!-- Application Flow Diagram -->
+        <div class="card">
+            <h2>🔄 Application Flow Diagram</h2>
+            <div class="mermaid">
+graph TB
+    subgraph Forms
+        F0["Form1<br/>"]
+        F1["Form2<br/>"]
+        F2["FORM7<br/>READ"]
+        F3["frmAYUDA<br/>"]
+        F4["FRMCLI<br/>READ UPDATE"]
+        F5["FRMLIB<br/>READ UPDATE"]
+        F6["FrmPres<br/>READ"]
+        F7["MDIForm1<br/>"]
+    end
+    subgraph Modules
+        M0["Module1<br/>6 funcs"]
+    end
+    F0 --> M0
+    F1 --> M0
+    F2 --> M0
+            </div>
+        </div>
+        
+        <!-- CRUD Analysis -->
+        
+    <div class="card">
+        <h2>💾 CRUD Operations Detected</h2>
+        <table>
+            <thead><tr><th>Form/Module</th><th>Operations</th></tr></thead>
+            <tbody>
+        <tr>
+            <td>FORM7</td>
+            <td><span class="badge badge-read">READ</span> </td>
+        </tr>
+        <tr>
+            <td>FRMCLI</td>
+            <td><span class="badge badge-read">READ</span> <span class="badge badge-update">UPDATE</span> </td>
+        </tr>
+        <tr>
+            <td>FRMLIB</td>
+            <td><span class="badge badge-read">READ</span> <span class="badge badge-update">UPDATE</span> </td>
+        </tr>
+        <tr>
+            <td>FrmPres</td>
+            <td><span class="badge badge-read">READ</span> </td>
+        </tr></tbody>
+        </table>
+    </div>
+        
+        <!-- Forms Detail -->
+        <div class="card">
+            <h2>🖼️ Forms Analysis</h2>
+            <table><thead><tr><th>Name</th><th>Controls</th><th>Events</th><th>Functions</th></tr></thead><tbody>
+        <tr>
+            <td><strong>Form1</strong></td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td><strong>Form2</strong></td>
+            <td>2</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td><strong>FORM7</strong></td>
+            <td>5</td>
+            <td>4</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td><strong>frmAYUDA</strong></td>
+            <td>2</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td><strong>FRMCLI</strong></td>
+            <td>31</td>
+            <td>25</td>
+            <td>26</td>
+        </tr>
+        <tr>
+            <td><strong>FRMLIB</strong></td>
+            <td>41</td>
+            <td>24</td>
+            <td>25</td>
+        </tr>
+        <tr>
+            <td><strong>FrmPres</strong></td>
+            <td>17</td>
+            <td>4</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td><strong>MDIForm1</strong></td>
+            <td>12</td>
+            <td>8</td>
+            <td>8</td>
+        </tr></tbody></table>
+        </div>
+        
+        <!-- Modules Detail -->
+        <div class="card">
+            <h2>📄 Modules Analysis</h2>
+            <table><thead><tr><th>Name</th><th>Functions</th><th>Global Vars</th><th>API Calls</th></tr></thead><tbody>
+        <tr>
+            <td><strong>Module1</strong></td>
+            <td>6</td>
+            <td>2</td>
+            <td>0</td>
+        </tr></tbody></table>
+        </div>
+        
+        <!-- Dependencies -->
+        <div class="card">
+            <h2>🔌 External Dependencies</h2>
+            <p>No external dependencies detected.</p>
+        </div>
+        
+        <!-- Global Variables -->
+        
+    <div class="card">
+        <h2>🌐 Global Variables</h2>
+        <table>
+            <thead><tr><th>Name</th><th>Type</th><th>Visibility</th><th>Source</th></tr></thead>
+            <tbody>
+        <tr>
+            <td>cn</td>
+            <td>New</td>
+            <td>Public</td>
+            <td>Module1</td>
+        </tr>
+        <tr>
+            <td>rsc1</td>
+            <td>New</td>
+            <td>Public</td>
+            <td>Module1</td>
+        </tr></tbody>
+        </table>
+    </div>
+        
+        <!-- API Calls -->
+        
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#a0a0a0',
+                secondaryColor: '#7b2cbf',
+                tertiaryColor: '#1a1a2e'
+            }
+        });
+        
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabGroup = tab.parentElement;
+                const contentId = tab.dataset.tab;
+                
+                tabGroup.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const container = tabGroup.nextElementSibling;
+                container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                container.querySelector(`#${contentId}`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

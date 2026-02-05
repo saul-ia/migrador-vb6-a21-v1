@@ -1,0 +1,66 @@
+<div class="dashboard-container">
+    <!-- Hero Section -->
+    <header class="hero glass-panel">
+        <h1><mat-icon>rocket_launch</mat-icon> Migration Control Center</h1>
+        <p>Orchestrate your VB6 to Angular 21 modernization journey.</p>
+    </header>
+
+    <!-- Main Config Card -->
+    <main class="config-section glass-panel">
+        <h2><mat-icon>settings</mat-icon> Configuration</h2>
+
+        <form [formGroup]="migrationForm" (ngSubmit)="runMigration()">
+
+            <!-- Migrator Version -->
+            <mat-form-field appearance="fill">
+                <mat-label>Migrator Version</mat-label>
+                <mat-select formControlName="migratorVersion">
+                    <mat-option value="v1.0">v1.0 (Stable)</mat-option>
+                    <mat-option value="v1.1-Beta">v1.1-Beta (Bleeding Edge)</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="path-inputs">
+                <!-- Source Path -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Source Path (VB6)</mat-label>
+                    <mat-icon matPrefix>folder_open</mat-icon>
+                    <input matInput formControlName="sourcePath" placeholder="e.g. vb6-apps/Biblioteca">
+                    <mat-hint>Relative to workspace root or absolute path</mat-hint>
+                </mat-form-field>
+
+                <!-- Target Path -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Destination Path (Angular)</mat-label>
+                    <mat-icon matPrefix>output</mat-icon>
+                    <input matInput formControlName="targetPath" placeholder="e.g. C:/Projects/NewApp">
+                </mat-form-field>
+            </div>
+
+            <!-- Options -->
+            <div class="options">
+                <mat-checkbox formControlName="createRepo" color="accent">Initialize new Git Repository</mat-checkbox>
+            </div>
+
+            <!-- Action Area -->
+            <div class="actions">
+                <button mat-flat-button color="accent" type="submit" [disabled]="!migrationForm.valid || isRunning()">
+                    <mat-icon>play_arrow</mat-icon>
+                    {{ isRunning() ? 'Migrating...' : 'Run Migration' }}
+                </button>
+            </div>
+
+        </form>
+
+        <!-- Progress & Logs -->
+        <div class="logs-section" *ngIf="logs().length > 0">
+            <mat-progress-bar mode="indeterminate" *ngIf="isRunning()" color="accent"></mat-progress-bar>
+            <div class="console-output glass-panel">
+                <div *ngFor="let log of logs()" class="log-line">
+                    <span class="timestamp">{{ 0 | date:'HH:mm:ss' }}</span> {{ log }}
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>

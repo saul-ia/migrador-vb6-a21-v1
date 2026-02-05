@@ -1,0 +1,70 @@
+<div class="form-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Registrar Préstamo</mat-card-title>
+            <mat-card-subtitle>Migración de FrmPres.frm</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="registrar()" class="loan-form">
+                <mat-form-field appearance="outline">
+                    <mat-label>Socio</mat-label>
+                    <mat-select formControlName="socioId">
+                        <mat-option *ngFor="let s of socios" [value]="s.Id">
+                            {{s.Nombre}} {{s.Apellido}} (Id: {{s.Id}})
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Libro (Disponibles)</mat-label>
+                    <mat-select formControlName="libroId">
+                        <mat-option *ngFor="let l of libros" [value]="l.Id">
+                            {{l.Titulo}} - {{l.Autor}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Días de Préstamo</mat-label>
+                    <input matInput type="number" formControlName="dias">
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+                    <mat-icon fontSet="material-symbols-rounded">check_circle</mat-icon>
+                    Registrar Préstamo
+                </button>
+            </form>
+
+            <h3 class="mt-4">Préstamos Activos</h3>
+            <table mat-table [dataSource]="prestamos" class="mat-elevation-z8">
+                <ng-container matColumnDef="Libro">
+                    <th mat-header-cell *matHeaderCellDef> Libro </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Titulo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Socio">
+                    <th mat-header-cell *matHeaderCellDef> Socio </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Nombre}} {{element.Apellido}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Fecha">
+                    <th mat-header-cell *matHeaderCellDef> F. Préstamo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.FecPres}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Devolucion">
+                    <th mat-header-cell *matHeaderCellDef> F. Devolución </th>
+                    <td mat-cell *matCellDef="let element"> {{element.FecDev}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Dias">
+                    <th mat-header-cell *matHeaderCellDef> Días </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dias}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+</div>

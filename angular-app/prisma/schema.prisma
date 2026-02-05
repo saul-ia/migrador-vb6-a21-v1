@@ -1,0 +1,47 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev_v2.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Libros {
+  Id      Int     @id @default(autoincrement())
+  Titulo  String
+  Autor   String?
+  ISBN    String? @unique
+  Estado  String  @default("Disponible") // Disponible, Prestado
+  
+  Prestamos Prestamos[]
+}
+
+model Socios {
+  Id        Int     @id @default(autoincrement())
+  Nombre    String
+  Apellido  String?
+  DNI       String?
+  Direccion String?
+  Email     String?
+  Telefono  String?
+  
+  Prestamos Prestamos[]
+}
+
+model Prestamos {
+  Id             Int       @id @default(autoincrement())
+  IdLibro        Int
+  IdSocio        Int
+  FechaPrestamo  DateTime  @default(now())
+  FechaDevolucion DateTime?
+  
+  Libro Libros @relation(fields: [IdLibro], references: [Id])
+  Socio Socios @relation(fields: [IdSocio], references: [Id])
+}
+
+model Usuarios {
+  Id       Int    @id @default(autoincrement())
+  Username String @unique
+  Password String
+}

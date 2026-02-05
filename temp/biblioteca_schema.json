@@ -1,0 +1,86 @@
+{
+  "summary": {
+    "total_tables": 3,
+    "total_relationships": 0,
+    "database_type": "Access",
+    "data_sources": []
+  },
+  "tables": {
+    "clave": {
+      "columns": [
+        "pass"
+      ],
+      "primary_key": null,
+      "foreign_keys": [],
+      "operations": [
+        "READ"
+      ],
+      "sources": [
+        "FORM7.FRM"
+      ]
+    },
+    "cliente": {
+      "columns": [
+        "telefono",
+        "apellidos",
+        "*",
+        "nºdoc",
+        "domicilio",
+        "idcliente",
+        "nombres"
+      ],
+      "primary_key": null,
+      "foreign_keys": [],
+      "operations": [
+        "READ",
+        "UPDATE"
+      ],
+      "sources": [
+        "FRMCLI.FRM",
+        "FRMLIB.FRM",
+        "FrmPres.frm"
+      ]
+    },
+    "libros": {
+      "columns": [
+        "dias",
+        "fecdev",
+        "fecpres",
+        "titulo",
+        "estado",
+        "autor",
+        "idlibro",
+        "socio"
+      ],
+      "primary_key": null,
+      "foreign_keys": [],
+      "operations": [
+        "READ",
+        "UPDATE"
+      ],
+      "sources": [
+        "FrmPres.frm",
+        "FRMLIB.FRM"
+      ]
+    }
+  },
+  "relationships": [],
+  "migration_recommendations": [
+    {
+      "type": "READ_ONLY",
+      "tables": [
+        "clave"
+      ],
+      "recommendation": "Consider as lookup/reference tables - may only need GET endpoint"
+    },
+    {
+      "type": "NO_PRIMARY_KEY",
+      "tables": [
+        "clave",
+        "cliente",
+        "libros"
+      ],
+      "recommendation": "⚠️ Add primary key during migration for proper REST resource identification"
+    }
+  ]
+}
