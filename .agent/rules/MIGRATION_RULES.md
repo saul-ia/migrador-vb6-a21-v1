@@ -1,152 +1,158 @@
 ---
-description: Global rules and validation criteria for the VB6 to Angular migration.
+name: migration-rules
+description: Mandatory rules and conventions for VB6 → Angular migration. ZONELESS Angular.
 ---
 
-# Migration Rules v2.0
+# Migration Rules v3.0 (Zoneless Angular)
 
-## 1. Code Generation Rules
+## 📋 Naming Conventions
 
-### 1.1 Never Skip Functionality
-- ❌ **Prohibited**: Removing features that exist in VB6
-- ✅ **Required**: Every VB6 feature must have a modern equivalent
+### Files
+| VB6 | Angular | Example |
+|-----|---------|---------|
+| `FrmClientes` | `clientes.component.ts` | Kebab-case, singular |
+| `ModUtils` | `utils.service.ts` | Service suffix |
+| `ClsPersona` | `persona.model.ts` | Model suffix |
 
-### 1.2 Type Safety
-- All TypeScript code must use strict typing
-- No `any` types except in exceptional documented cases
-- DTOs must match between Frontend and Backend
+### Variables
+| VB6 | TypeScript | Example |
+|-----|------------|---------|
+| `strNombre` | `nombre: string` | No Hungarian prefix |
+| `intCantidad` | `cantidad: number` | CamelCase |
+| `blnActivo` | `activo: boolean` | Explicit types |
 
-### 1.3 Naming Conventions
-
-| VB6 | Angular/TypeScript | Backend |
-|-----|-------------------|---------|
-| `frmClientes` | `ClientesComponent` | N/A |
-| `modData` | `DataService` | `data.service.ts` |
-| `Clientes` (table) | `Cliente` (model) | `Prisma model Cliente` |
-| `cmdGuardar` | `save()` method | N/A |
-| `txtNombre` | `nombre: FormControl` | N/A |
-
----
-
-## 2. Architecture Rules
-
-### 2.1 Separation of Concerns
-```
-VB6 Form → Angular Component (UI only)
-VB6 Business Logic → Angular Service / Backend Service
-VB6 Data Access → Backend Service via REST API
-```
-
-### 2.2 No Direct Database Access from Frontend
-- ❌ Frontend must NEVER contain SQL
-- ✅ All data operations through `/api/*` endpoints
-
-### 2.3 State Management
-- Use Angular Signals for component state
-- Use Services for shared state
-- No global variables (unlike VB6 Public vars)
+### Functions
+| VB6 | Angular | Location |
+|-----|---------|----------|
+| `Public Function` in `.bas` | `method()` in Service | `*.service.ts` |
+| `Private Sub` in `.frm` | `private method()` | `*.component.ts` |
 
 ---
 
-## 3. Data Migration Rules
+## 🔒 Security Rules
 
-### 3.1 Schema Mapping
+### Prohibited
+| ❌ NO | ✅ YES | Reason |
+|-------|--------|--------|
+| Hardcoded credentials | Environment variables | Security |
+| Dynamic SQL with concatenation | Prisma parameterized | SQL Injection |
+| `On Error Resume Next` | Explicit `try/catch` | Debugging |
+| Hardcoded `App.Path` | Relative configuration | Portability |
 
-| Access Type | SQLite/Prisma Type |
-|-------------|-------------------|
-| AutoNumber | `Int @id @default(autoincrement())` |
-| Text | `String` |
-| Memo | `String` |
-| Number (Long) | `Int` |
-| Number (Double) | `Float` |
-| Currency | `Decimal` |
-| Date/Time | `DateTime` |
-| Yes/No | `Boolean @default(false)` |
-| OLE Object | ❌ Not migrated (store path only) |
-
-### 3.2 Required Fields
-- Every table MUST have a primary key
-- Add `createdAt` and `updatedAt` to all new tables
-- Preserve original field names when possible
-
-### 3.3 Relationships
-- Convert implicit relationships (foreign keys) to explicit Prisma relations
-- Document any orphan data found during migration
+### Required
+- JWT tokens in `localStorage` with expiration
+- HTTPS in production
+- Validation on frontend AND backend
+- User input sanitization
 
 ---
 
-## 4. UI Migration Rules
+## 🏗️ Architecture Rules (ZONELESS Angular)
 
-### 4.1 Control Mapping
+### Frontend (Angular 21 - Zoneless)
+| Rule | Description |
+|------|-------------|
+| **Zoneless Change Detection** | Use `provideExperimentalZonelessChangeDetection()` - NO Zone.js! |
+| **OnPush MANDATORY** | Every component MUST use `changeDetection: ChangeDetectionStrategy.OnPush` |
+| **Standalone Components** | NEVER use NgModules |
+| **Signals for ALL state** | Never use plain variables for component state |
+| Reactive Forms | Template-driven forms prohibited |
+| MatDialog for modals | Don't use routes for edit forms |
+| Lucide for icons | Material Icons as alternative |
 
-| VB6 Control | Angular Material |
-|-------------|------------------|
-| TextBox | `<input matInput>` |
-| CommandButton | `<button mat-raised-button>` |
-| DataGrid/MSFlexGrid | `<mat-table>` |
-| ComboBox | `<mat-select>` |
-| CheckBox | `<mat-checkbox>` |
-| DateTimePicker | `<mat-datepicker>` |
-| Frame | `<mat-card>` |
-| TabStrip | `<mat-tab-group>` |
-| MsgBox | `MatSnackBar` |
-| InputBox | `MatDialog` |
+### Zoneless Prohibited
+| ❌ Prohibited | ✅ Alternative |
+|---------------|----------------|
+| `import 'zone.js'` | `provideExperimentalZonelessChangeDetection()` |
+| `ChangeDetectionStrategy.Default` | `ChangeDetectionStrategy.OnPush` |
+| Plain variables for state | `signal()` |
+| `ngOnInit` for data loading | Constructor + `effect()` |
+| `setTimeout` / `setInterval` | `signal.set()` + `effect()` |
+| `implements OnInit` | Direct constructor initialization |
 
-### 4.2 Modal Forms
-- VB6 `Form.Show vbModal` → Angular `MatDialog`
-- Must preserve Cancel/Save behavior
-- Return data via `dialogRef.afterClosed()`
+### Backend (Express)
+| Rule | Description |
+|------|-------------|
+| Prisma required | No raw SQL |
+| Thin controllers | Logic in Services |
+| Centralized error handling | `errorMiddleware` |
+| Pino for logging | `console.log` prohibited |
 
-### 4.3 Validation
-- Replicate ALL VB6 validations in Angular Reactive Forms
-- Use same error messages (translated if needed)
-
----
-
-## 5. Error Handling Rules
-
-### 5.1 VB6 to Modern Mapping
-
-| VB6 Pattern | Modern Equivalent |
-|-------------|-------------------|
-| `On Error Resume Next` | ❌ Remove - use proper try/catch |
-| `On Error GoTo Handler` | try/catch block |
-| `Err.Number` | `error.status` or exception type |
-| `MsgBox "Error"` | `MatSnackBar` or `console.error` |
-
-### 5.2 Backend Error Responses
-```typescript
-// Standard error response format
-{
-  status: number,
-  message: string,
-  errors?: { field: string, message: string }[]
-}
-```
 
 ---
 
-## 6. Testing Rules
+## 📊 Data Rules
 
-### 6.1 Coverage Requirements
-- Backend services: 80% minimum
-- Frontend components: 70% minimum
-- E2E: Critical user flows
+### Type Migration
+| Access/VB6 | SQLite | TypeScript | Prisma |
+|------------|--------|------------|--------|
+| `Long` | `INTEGER` | `number` | `Int` |
+| `Double` | `REAL` | `number` | `Float` |
+| `String` | `TEXT` | `string` | `String` |
+| `Date` | `TEXT (ISO)` | `Date` | `DateTime` |
+| `Currency` | `REAL` | `number` | `Decimal` |
+| `Boolean` | `INTEGER (0/1)` | `boolean` | `Boolean` |
+| `Null` | `NULL` | `\| null` | `?` |
 
-### 6.2 What to Test
-- Every CRUD operation
-- Form validation
-- Error handling paths
-- Authentication flows
+### Integrity
+- All IDs are `autoincrement`
+- Foreign Keys required
+- Indexes on frequently searched fields
+- Cascade delete only if logically correct
 
 ---
 
-## 7. Documentation Rules
+## ✅ Quality Rules
 
-### 7.1 Code Comments
-- Document non-obvious business logic
-- Reference original VB6 function if complex
-- Use JSDoc for public methods
+### Code
+- ESLint + Prettier required
+- 0 errors from `ng lint` and `tsc --noEmit`
+- Comments only for complex logic
+- Descriptive names (no abbreviations)
 
-### 7.2 Migration Notes
-- When a feature changes significantly, document why
-- When a feature is deferred, create a TODO issue
+### Testing (MANDATORY)
+| Metric | Minimum | Enforcement |
+|--------|---------|-------------|
+| Line Coverage | 80% | Jest `--coverage` |
+| Branch Coverage | 70% | Jest `--coverage` |
+| E2E Flow Coverage | 100% | All VB6 flows must have Playwright tests |
+| Critical Path Tests | Required | Login, main CRUD, workflows |
+
+### Testing Tools
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| Unit Backend | Jest | Services, Controllers |
+| Unit Frontend | Jest + TestBed | Components, Services |
+| E2E | Playwright | Full user flows |
+| Coverage | Istanbul/c8 | Threshold enforcement |
+
+### Testing Requirements
+1. Every VB6 form MUST have corresponding E2E tests
+2. Every backend service MUST have unit tests
+3. Every Angular component with logic MUST have unit tests
+4. Tests MUST be generated automatically from VB6 analysis
+5. Coverage reports MUST be generated in `analysis/coverage/`
+6. NO deployment without passing all tests
+
+### Git
+- Descriptive commits (not "fix", "update")
+- 1 feature = 1 branch
+- PR required for `main`
+- CI must run tests before merge
+
+---
+
+## 🚫 Prohibited Patterns
+
+| ❌ Prohibited | ✅ Alternative |
+|---------------|----------------|
+| `import 'zone.js'` | `provideExperimentalZonelessChangeDetection()` |
+| `@NgModule` | Standalone components |
+| `any` in TypeScript | Explicit types |
+| `innerHTML` with user input | Angular binding `[innerText]` |
+| Nested callbacks | Async/await or RxJS |
+| `setTimeout` for sync | Signals + effects |
+| Global variables | Services with `providedIn: 'root'` |
+| `implements OnInit` for data | Constructor initialization |
+| Plain class properties for state | `signal()` |
+

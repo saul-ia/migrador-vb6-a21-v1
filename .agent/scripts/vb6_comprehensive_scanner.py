@@ -8,11 +8,16 @@ Generates structured JSON output for report generation.
 
 import os
 import re
+import sys
 import json
 import argparse
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
+
+# Fix Windows console encoding
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # ============================================================================
 # FILE TYPE DEFINITIONS

@@ -1,67 +1,41 @@
 ---
-description: Exports Access data and imports it into SQLite via Prisma.
+description: Exports Access data and imports it into SQLite via Prisma. FULLY AUTOMATED - ALL TABLES.
 ---
 
 // turbo-all
 
-# Migrate Database Workflow v2.0
+# Migrate Database Workflow v3.0 (Fully Automated)
 
-## Purpose
+## Execution Mode
 
-Convert VB6/Access database to SQLite with Prisma ORM, preserving all data integrity.
-
----
-
-## Prerequisites
-
-- Analysis phase complete (`VB6_DATABASE.md` available)
-- Node.js 24+ installed
-- Backend project initialized
+| Setting | Value |
+|---------|-------|
+| **Confirmation Required** | ❌ NO |
+| **Migration Scope** | 🔄 ALL TABLES |
+| **Auto-Continue** | ✅ YES |
 
 ---
 
-## Step 1: Export Access Data
+## Step 1: Export ALL Tables from Access
 
-### Option A: Using mdbtools (Linux/WSL)
 ```bash
-# Install mdbtools
-sudo apt-get install mdbtools
+mkdir -p exports
 
-# List tables
-mdb-tables database.mdb
-
-# Export each table to CSV
-mdb-export database.mdb Socios > data/socios.csv
-mdb-export database.mdb Libros > data/libros.csv
-mdb-export database.mdb Prestamos > data/prestamos.csv
-```
-
-### Option B: Using Access (Windows)
-1. Open `.mdb` in Microsoft Access
-2. Right-click each table → Export → Text File (CSV)
-3. Save to `data/` folder
-
-### Option C: Using Python
-```bash
-python .agent/scripts/vb6_schema_extractor.py "path/to/project" -o schema.json --pretty
+# Export ALL tables (iterate from schema analysis)
+# For each table in VB6_DATABASE.md:
+mdb-export database.mdb TableName > exports/tablename.csv
 ```
 
 ---
 
-## Step 2: Create Prisma Schema
+## Step 2: Generate Complete Prisma Schema
 
-Based on `VB6_DATABASE.md`, generate the schema:
+Generate `prisma/schema.prisma` with:
+- ALL models from VB6_DATABASE.md
+- ALL relationships (foreign keys)
+- ALL indexes
+- Proper type mappings
 
-```bash
-# Initialize Prisma
-cd backend
-npx prisma init --datasource-provider sqlite
-
-# Edit prisma/schema.prisma with extracted schema
-# (backend-architect generates this)
-```
-
-### Schema Template
 ```prisma
 datasource db {
   provider = "sqlite"
@@ -72,43 +46,25 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Socio {
-  id        Int       @id @default(autoincrement())
-  nombre    String
-  direccion String?
-  telefono  String?
-  email     String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  prestamos Prestamo[]
-}
-
-// Add all models from VB6_DATABASE.md
+// ALL models generated here - not just samples
 ```
 
 ---
 
-## Step 3: Validate and Generate
+## Step 3: Run Migrations (Auto)
 
 ```bash
-# Validate schema syntax
 npx prisma validate
-
-# Format schema
 npx prisma format
-
-# Generate Prisma client
+npx prisma migrate dev --name init
 npx prisma generate
-
-# Create database and tables
-npx prisma db push
 ```
 
 ---
 
-## Step 4: Seed Data from CSV
+## Step 4: Seed ALL Data
 
-Create seed script:
+Generate and run seed script for ALL tables:
 
 ```typescript
 // prisma/seed.ts
@@ -118,26 +74,33 @@ import * as path from 'path';
 
 const prisma = new PrismaClient();
 
-async function main() {
-  // Read CSV
-  const sociosData = fs.readFileSync('data/socios.csv', 'utf-8');
-  const lines = sociosData.split('\n').slice(1); // Skip header
-
-  for (const line of lines) {
-    if (!line.trim()) continue;
-    const [id, nombre, direccion, telefono, email] = line.split(',');
-    
-    await prisma.socio.create({
-      data: {
-        nombre: nombre.trim(),
-        direccion: direccion?.trim() || null,
-        telefono: telefono?.trim() || null,
-        email: email?.trim() || null
-      }
+async function seedTable(tableName: string, csvPath: string) {
+  const content = fs.readFileSync(csvPath, 'utf-8');
+  const lines = content.split('\n');
+  const headers = lines[0].split(',').map(h => h.trim());
+  
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const values = lines[i].split(',');
+    const data: Record<string, any> = {};
+    headers.forEach((h, idx) => {
+      data[h] = values[idx]?.trim();
     });
+    await (prisma as any)[tableName].create({ data });
   }
+  console.log(`✅ Seeded ${tableName}`);
+}
 
-  console.log('✅ Seeding complete');
+async function main() {
+  // Seed ALL tables in dependency order
+  const tables = [
+    // Parent tables first
+    // Child tables after
+  ];
+  
+  for (const table of tables) {
+    await seedTable(table, `./exports/${table.toLowerCase()}.csv`);
+  }
 }
 
 main()
@@ -145,41 +108,26 @@ main()
   .finally(() => prisma.$disconnect());
 ```
 
-Run seed:
 ```bash
 npx ts-node prisma/seed.ts
 ```
 
 ---
 
-## Step 5: Verify Migration
+## Step 5: Verify (Auto)
 
 ```bash
-# Open Prisma Studio to inspect data
-npx prisma studio
+# Open Prisma Studio to verify
+npx prisma studio &
 
-# Run verification queries
-npx prisma db execute --stdin <<< "SELECT COUNT(*) FROM Socio;"
+# Verify counts
+npx prisma db execute --stdin <<< "SELECT name, (SELECT COUNT(*) FROM name) as count FROM sqlite_master WHERE type='table';"
 ```
 
 ---
 
-## Validation Checklist
+## Auto-Continue
 
-- [ ] All tables exported from Access
-- [ ] Prisma schema validates
-- [ ] All data imported without errors
-- [ ] Row counts match original database
-- [ ] Relationships (foreign keys) preserved
-- [ ] Test queries return expected results
+After database migration completes, automatically proceed to UI migration.
 
----
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Encoding errors | Use `latin1` or `cp1252` when reading CSV |
-| Date format issues | Parse with `new Date()` or custom parser |
-| Duplicate keys | Clean duplicates before import |
-| Missing relations | Import parent tables first |
+**No confirmation required.**

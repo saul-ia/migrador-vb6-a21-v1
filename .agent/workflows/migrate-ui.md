@@ -1,254 +1,142 @@
 ---
-description: Migrates a specific VB6 Form to an Angular Component.
+description: Migrates ALL VB6 Forms to Angular Components. FULLY AUTOMATED - COMPLETE MIGRATION.
 ---
 
 // turbo-all
 
-# Migrate UI Workflow v2.0
+# Migrate UI Workflow v3.0 (Fully Automated)
 
-## Purpose
+## Execution Mode
 
-Convert a VB6 Form (`.FRM`) to an Angular standalone component with full functionality preservation.
-
----
-
-## Prerequisites
-
-- Analysis phase complete (`VB6_LOGIC_ANALYSIS.md`)
-- Backend API ready for this entity
-- Angular project initialized with Material
+| Setting | Value |
+|---------|-------|
+| **Confirmation Required** | ❌ NO |
+| **Migration Scope** | 🔄 ALL FORMS |
+| **Auto-Continue** | ✅ YES |
+| **Sample Mode** | ❌ DISABLED |
 
 ---
 
-## Step 1: Analyze VB6 Form
+## Step 1: Identify ALL Forms
 
-### Extract from FRM file:
+From `VB6_INVENTORY.md`, get complete list of forms:
+
+```
+FrmMain.frm      → dashboard.component
+FrmSocios.frm    → members.component + member-dialog.component
+FrmLibros.frm    → books.component + book-dialog.component
+FrmPrestamos.frm → loans.component + loan-dialog.component
+FrmReportes.frm  → reports.component
+FrmLogin.frm     → login.component
+...              → ... (ALL forms)
+```
+
+---
+
+## Step 2: Generate ALL Components
+
+For EACH form in the inventory:
+
+### List Component
 ```bash
-# View form structure
-grep -E "Begin|End|Caption|Text|Name" path/to/form.frm
-
-# List all controls
-grep -E "^Begin\s+\w+\.\w+" path/to/form.frm
-
-# Find event handlers
-grep -E "Private Sub \w+_\w+" path/to/form.frm
+ng generate component components/[entity-name] --standalone
 ```
 
-### Document:
-- [ ] Control inventory (TextBox, Button, Grid, etc.)
-- [ ] Event handlers (Click, Change, Load, etc.)
-- [ ] Business rules (validations, calculations)
-- [ ] Data operations (CRUD)
-
----
-
-## Step 2: Create Component Structure
-
+### Dialog Component
 ```bash
-# Generate component
-ng generate component components/socios --standalone
-
-# Generate dialog component
-ng generate component components/socio-dialog --standalone
+ng generate component components/[entity-name]-dialog --standalone
 ```
 
-### File structure:
-```
-src/app/components/
-├── socios/
-│   ├── socios.component.ts      # List with mat-table
-│   ├── socios.component.html
-│   └── socios.component.scss
-└── socio-dialog/
-    ├── socio-dialog.component.ts  # Create/Edit modal
-    ├── socio-dialog.component.html
-    └── socio-dialog.component.scss
+### Service
+```bash
+ng generate service services/[entity-name]
 ```
 
 ---
 
-## Step 3: Implement List Component
+## Step 3: Implement Components (Auto)
 
-```typescript
-@Component({
-  selector: 'app-socios',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDialogModule,
-    LucideAngularModule
-  ],
-  templateUrl: './socios.component.html'
-})
-export class SociosComponent implements OnInit {
-  displayedColumns = ['id', 'nombre', 'telefono', 'email', 'actions'];
-  dataSource = signal<Socio[]>([]);
-  loading = signal(false);
+For EACH entity, generate:
 
-  constructor(
-    private sociosService: SociosService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) {}
+### List Component Features
+- `mat-table` with ALL columns from VB6 grid
+- Sorting support
+- Filter/search functionality
+- Actions column (edit, delete)
+- Add button opening dialog
+- Loading state with signal
 
-  ngOnInit() {
-    this.loadData();
-  }
-
-  loadData() {
-    this.loading.set(true);
-    this.sociosService.getAll().subscribe({
-      next: (data) => this.dataSource.set(data),
-      complete: () => this.loading.set(false)
-    });
-  }
-
-  openDialog(item?: Socio) {
-    const dialogRef = this.dialog.open(SocioDialogComponent, {
-      width: '600px',
-      data: item ?? null
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.loadData();
-    });
-  }
-
-  delete(id: number) {
-    // Confirm dialog first
-    this.sociosService.delete(id).subscribe(() => {
-      this.snackBar.open('Eliminado correctamente', 'OK', { duration: 3000 });
-      this.loadData();
-    });
-  }
-}
-```
+### Dialog Component Features
+- Reactive form with ALL fields from VB6 form
+- Validation matching VB6 logic
+- Create and Edit modes
+- Cancel and Save buttons
+- Error display
 
 ---
 
-## Step 4: Implement Dialog Component
-
-```typescript
-@Component({
-  selector: 'app-socio-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    LucideAngularModule
-  ],
-  templateUrl: './socio-dialog.component.html'
-})
-export class SocioDialogComponent implements OnInit {
-  form = new FormGroup({
-    nombre: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    direccion: new FormControl(''),
-    telefono: new FormControl(''),
-    email: new FormControl('', Validators.email)
-  });
-
-  isEdit = false;
-
-  constructor(
-    private dialogRef: MatDialogRef<SocioDialogComponent>,
-    private sociosService: SociosService,
-    @Inject(MAT_DIALOG_DATA) public data: Socio | null
-  ) {}
-
-  ngOnInit() {
-    if (this.data) {
-      this.isEdit = true;
-      this.form.patchValue(this.data);
-    }
-  }
-
-  save() {
-    if (!this.form.valid) return;
-
-    const dto = this.form.value as CreateSocioDto;
-    const request$ = this.isEdit
-      ? this.sociosService.update(this.data!.id, dto)
-      : this.sociosService.create(dto);
-
-    request$.subscribe({
-      next: () => this.dialogRef.close(true),
-      error: () => {} // Handled by interceptor
-    });
-  }
-
-  cancel() {
-    this.dialogRef.close(false);
-  }
-}
-```
-
----
-
-## Step 5: VB6 Event → Angular Mapping
-
-| VB6 Event | Angular Equivalent |
-|-----------|-------------------|
-| `Form_Load` | `ngOnInit()` |
-| `cmdNuevo_Click` | `openDialog()` |
-| `cmdGuardar_Click` | `save()` |
-| `cmdCancelar_Click` | `cancel()` |
-| `cmdEliminar_Click` | `delete(id)` |
-| `txtField_Change` | Reactive Form binding |
-| `txtField_LostFocus` | `(blur)` event |
-| `dgGrid_DblClick` | `(click)` on table row |
-
----
-
-## Step 6: Validation Rules Mapping
-
-| VB6 Validation | Angular Equivalent |
-|----------------|-------------------|
-| `If Len(txt) = 0 Then` | `Validators.required` |
-| `If Len(txt) > 50 Then` | `Validators.maxLength(50)` |
-| `If Not IsNumeric(txt) Then` | `Validators.pattern(/^\d+$/)` |
-| `If Not IsDate(txt) Then` | `mat-datepicker` handles this |
-| `MsgBox "Error"` | `<mat-error>` in form field |
-
----
-
-## Step 7: Add Route
+## Step 4: Generate ALL Routes
 
 ```typescript
 // app.routes.ts
+import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
+
 export const routes: Routes = [
-  { path: 'socios', component: SociosComponent },
-  // ... other routes
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
+  { 
+    path: 'dashboard', 
+    loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [authGuard]
+  },
+  // ALL other routes generated here
 ];
 ```
 
 ---
 
-## Verification
+## Step 5: VB6 → Angular Mapping (Complete)
+
+### Controls
+| VB6 Control | Angular Material | Generated |
+|-------------|------------------|-----------|
+| TextBox | mat-form-field + input | ✅ All |
+| CommandButton | mat-raised-button | ✅ All |
+| DataGrid | mat-table | ✅ All |
+| ComboBox | mat-select | ✅ All |
+| CheckBox | mat-checkbox | ✅ All |
+| Label | span / mat-label | ✅ All |
+| DateTimePicker | mat-datepicker | ✅ All |
+
+### Events
+| VB6 Event | Angular | Generated |
+|-----------|---------|-----------|
+| Form_Load | ngOnInit() | ✅ All |
+| Click | (click) | ✅ All |
+| Change | (input) / reactive | ✅ All |
+| LostFocus | (blur) | ✅ All |
+
+---
+
+## Step 6: Validate (Auto)
 
 ```bash
-# Lint
 ng lint
-
-# Build check
 ng build --configuration development
-
-# Run app
-ng serve
+ng test --watch=false --browsers=ChromeHeadless
 ```
 
-### Manual Testing Checklist:
-- [ ] List loads data correctly
-- [ ] Create new record works
-- [ ] Edit existing record works
-- [ ] Delete with confirmation works
-- [ ] Form validations match VB6
-- [ ] Error messages display correctly
-- [ ] Responsive design works
+---
+
+## Output
+
+Complete Angular application with:
+- ✅ ALL list components
+- ✅ ALL dialog components  
+- ✅ ALL services
+- ✅ Complete routing
+- ✅ Auth guard
+- ✅ Error interceptor
+
+**No forms skipped. No samples. Complete migration.**

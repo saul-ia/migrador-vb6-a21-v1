@@ -4,7 +4,7 @@ description: Complete specifications and patterns for the target stack (Angular 
 allowed-tools: view_file, write_to_file, run_command
 ---
 
-# Modern Stack Manual v2.0
+# Modern Stack Manual v3.0 (Zoneless)
 
 ## 📦 Version Requirements
 
@@ -20,17 +20,20 @@ allowed-tools: view_file, write_to_file, run_command
 | **Pino** | Latest | `pino`, `pino-http` |
 | **Swagger** | Latest | `swagger-ui-express`, `swagger-jsdoc` |
 
----
+> [!IMPORTANT]
+> **ZONELESS ANGULAR**: This stack uses `provideExperimentalZonelessChangeDetection()` - NO Zone.js required!
+
+
 
 # 1. ⚙️ Frontend Specifications
 
 ## 1.1 Angular Core Patterns
 
-### Standalone Components (Required)
+### Standalone Components (Required - Strict Mode)
 ```typescript
 @Component({
-  selector: 'app-socios',
-  standalone: true,
+  selector: 'app-members',
+  standalone: true,  // ⚠️ MANDATORY - NEVER use NgModules
   imports: [
     CommonModule,
     MatTableModule,
@@ -39,21 +42,65 @@ allowed-tools: view_file, write_to_file, run_command
     MatDialogModule,
     LucideAngularModule
   ],
-  templateUrl: './socios.component.html',
-  styleUrl: './socios.component.scss'
+  templateUrl: './members.component.html',
+  styleUrl: './members.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush  // ⚠️ REQUIRED for Zoneless
 })
-export class SociosComponent implements OnInit {
-  // Use Signals for state
-  data = signal<Socio[]>([]);
+export class MembersComponent {
+  // Use Signals for ALL state - Required for Zoneless
+  data = signal<Member[]>([]);
   loading = signal<boolean>(false);
+  error = signal<string | null>(null);
 }
 ```
 
-### Signals for State Management
+### main.ts Bootstrap (ZONELESS - No Zone.js!)
+```typescript
+// main.ts - ZONELESS Angular 21
+// ⚠️ DO NOT import zone.js - We use Zoneless Change Detection!
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+import { App } from './app/app';
+
+bootstrapApplication(App, appConfig)
+  .catch((err) => console.error(err));
+```
+
+### app.config.ts (ZONELESS Configuration)
+```typescript
+// app.config.ts - CRITICAL: Zoneless Setup
+import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { routes } from './app.routes';
+import { errorInterceptor } from './interceptors/error.interceptor';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ⚠️ CRITICAL: Enable Zoneless Change Detection
+    provideExperimentalZonelessChangeDetection(),
+    
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([errorInterceptor])),
+    provideAnimationsAsync()
+  ]
+};
+```
+
+> [!CAUTION]
+> **ZONELESS REQUIREMENTS:**
+> 1. ALL components MUST use `changeDetection: ChangeDetectionStrategy.OnPush`
+> 2. ALL state MUST be managed with Signals (never plain variables)
+> 3. NEVER use `setTimeout` or `setInterval` for UI updates - use `effect()` instead
+> 4. NEVER import `zone.js` anywhere in the application
+
+### Signals for State Management (MANDATORY for Zoneless)
+
 ```typescript
 // ✅ Correct: Use Signals
-data = signal<Socio[]>([]);
-selectedItem = signal<Socio | null>(null);
+data = signal<Member[]>([]);
+selectedItem = signal<Member | null>(null);
 isLoading = signal(false);
 
 // Computed signals
@@ -69,13 +116,65 @@ constructor() {
 // ❌ Avoid: BehaviorSubject for component state
 ```
 
+> [!CAUTION]
+> When using `ngModel` inside a `<form>` tag, you **MUST** add a `name` attribute to the input:
+> ```html
+> <!-- ✅ Correct -->
+> <input name="email" [ngModel]="email()" (ngModelChange)="email.set($event)">
+> 
+> <!-- ❌ Error NG01352 -->
+> <input [ngModel]="email()" (ngModelChange)="email.set($event)">
+> ```
+
+### VB6 Pattern: Entity Pre-Validation (cmdcons_Click)
+VB6 often validates entity state before allowing operations. Migrate this pattern:
+
+```typescript
+// VB6: Check if socio has pending loans before new loan
+// cmdcons_Click() -> "Este Socio Tiene X libros no devueltos"
+
+clientPendingLoans = signal<Libro[]>([]);
+showPendingWarning = signal(false);
+
+async onClientSelected(clienteId: number) {
+  this.selectedClienteId.set(clienteId);
+  
+  const pendingLoans = this.loanedBooks().filter(
+    libro => libro.socioId === clienteId
+  );
+  
+  this.clientPendingLoans.set(pendingLoans);
+  this.showPendingWarning.set(pendingLoans.length > 0);
+}
+```
+
+```html
+<!-- Show warning like VB6 MsgBox -->
+@if (showPendingWarning()) {
+<div class="warning-box">
+  <span>⚠️</span>
+  <strong>Este socio tiene {{ clientPendingLoans().length }} libro(s) no devuelto(s)</strong>
+</div>
+}
+```
+
+### VB6 Pattern: DateAdd Calculation
+```typescript
+// VB6: DateAdd("d", Val(txtdias), Now())
+returnDate = computed(() => {
+  const date = new Date();
+  date.setDate(date.getDate() + this.dias());
+  return date;
+});
+```
+
 ## 1.2 Angular Material + UI
 
 ### MatDialog for Modals (VB6 Form Replacement)
 ```typescript
 // Opening dialog
-openDialog(item?: Socio): void {
-  const dialogRef = this.dialog.open(SocioDialogComponent, {
+openDialog(item?: Member): void {
+  const dialogRef = this.dialog.open(MemberDialogComponent, {
     width: '600px',
     data: item ?? null,
     disableClose: true
@@ -92,14 +191,14 @@ openDialog(item?: Socio): void {
 ### Modern Date Picker
 ```html
 <mat-form-field appearance="outline">
-  <mat-label>Fecha de Préstamo</mat-label>
-  <input matInput [matDatepicker]="picker" formControlName="fechaPrestamo">
+  <mat-label>Loan Date</mat-label>
+  <input matInput [matDatepicker]="picker" formControlName="loanDate">
   <mat-datepicker-toggle matIconSuffix [for]="picker">
     <lucide-icon name="calendar" matDatepickerToggleIcon></lucide-icon>
   </mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
-  <mat-error *ngIf="form.get('fechaPrestamo')?.hasError('required')">
-    Fecha requerida
+  <mat-error *ngIf="form.get('loanDate')?.hasError('required')">
+    Date is required
   </mat-error>
 </mat-form-field>
 ```
@@ -127,9 +226,9 @@ export const appConfig: ApplicationConfig = {
 
 ### Form Structure
 ```typescript
-export class SocioDialogComponent implements OnInit {
+export class MemberDialogComponent implements OnInit {
   form = new FormGroup({
-    nombre: new FormControl('', [
+    name: new FormControl('', [
       Validators.required,
       Validators.minLength(2),
       Validators.maxLength(100)
@@ -137,8 +236,8 @@ export class SocioDialogComponent implements OnInit {
     email: new FormControl('', [
       Validators.email
     ]),
-    telefono: new FormControl(''),
-    fechaAlta: new FormControl(new Date(), Validators.required)
+    phone: new FormControl(''),
+    registrationDate: new FormControl(new Date(), Validators.required)
   });
 
   // Custom validator example
@@ -158,24 +257,24 @@ export class SocioDialogComponent implements OnInit {
 ```html
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Nombre</mat-label>
-    <input matInput formControlName="nombre" placeholder="Nombre completo">
-    <mat-error *ngIf="form.get('nombre')?.hasError('required')">
-      El nombre es obligatorio
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" placeholder="Full name">
+    <mat-error *ngIf="form.get('name')?.hasError('required')">
+      Name is required
     </mat-error>
-    <mat-error *ngIf="form.get('nombre')?.hasError('minlength')">
-      Mínimo 2 caracteres
+    <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+      Minimum 2 characters
     </mat-error>
   </mat-form-field>
   
   <div mat-dialog-actions align="end">
     <button mat-button type="button" (click)="cancel()">
       <lucide-icon name="x" size="18"></lucide-icon>
-      Cancelar
+      Cancel
     </button>
     <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
       <lucide-icon name="save" size="18"></lucide-icon>
-      Guardar
+      Save
     </button>
   </div>
 </form>
@@ -186,25 +285,25 @@ export class SocioDialogComponent implements OnInit {
 ### Service Pattern
 ```typescript
 @Injectable({ providedIn: 'root' })
-export class SociosService {
-  private readonly apiUrl = '/api/socios';
+export class MembersService {
+  private readonly apiUrl = '/api/members';
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Socio[]> {
-    return this.http.get<Socio[]>(this.apiUrl);
+  getAll(): Observable<Member[]> {
+    return this.http.get<Member[]>(this.apiUrl);
   }
 
-  getById(id: number): Observable<Socio> {
-    return this.http.get<Socio>(`${this.apiUrl}/${id}`);
+  getById(id: number): Observable<Member> {
+    return this.http.get<Member>(`${this.apiUrl}/${id}`);
   }
 
-  create(dto: CreateSocioDto): Observable<Socio> {
-    return this.http.post<Socio>(this.apiUrl, dto);
+  create(dto: CreateMemberDto): Observable<Member> {
+    return this.http.post<Member>(this.apiUrl, dto);
   }
 
-  update(id: number, dto: UpdateSocioDto): Observable<Socio> {
-    return this.http.put<Socio>(`${this.apiUrl}/${id}`, dto);
+  update(id: number, dto: UpdateMemberDto): Observable<Member> {
+    return this.http.put<Member>(`${this.apiUrl}/${id}`, dto);
   }
 
   delete(id: number): Observable<void> {
@@ -217,24 +316,24 @@ export class SociosService {
 
 #### HTTP Error Codes Reference
 
-| Código | Condición | Nombre | Descripción | Acción en Interceptor |
-|--------|-----------|--------|-------------|----------------------|
-| `0` | `!navigator.onLine` | Offline / Sin Red | Sin conexión a internet | 📡 "Sin conexión a internet. Verifique su red." |
-| `0` | `navigator.onLine` | Unknown / CORS / Down | Servidor caído o CORS | ⚠️ "No se pudo contactar con el servidor." |
-| `400` | N/A | Bad Request | Sintaxis inválida o JSON mal formado | Mostrar `error.message` del backend |
-| `401` | N/A | Unauthorized | Token caducado o faltante | 🔒 Refresh Token o redirigir a Login |
-| `403` | N/A | Forbidden | Sin permisos para este recurso | ⛔ "No tiene permisos para esta acción." |
-| `404` | N/A | Not Found | Recurso no existe | Redirigir a 404 o mostrar mensaje |
-| `405` | N/A | Method Not Allowed | Método HTTP incorrecto | Loguear en consola (error de desarrollo) |
-| `408` | N/A | Request Timeout | Cliente tardó en enviar | Sugerir reintentar |
-| `409` | N/A | Conflict | Registro duplicado | Mostrar error específico en formulario |
-| `422` | N/A | Unprocessable Entity | Error de validación | Mapear errores a campos del formulario |
-| `429` | N/A | Too Many Requests | Rate limiting excedido | ⏳ Bloquear botón temporalmente |
-| `500` | N/A | Internal Server Error | Bug en backend | 🔥 "Error interno. Intente más tarde." |
-| `501` | N/A | Not Implemented | Endpoint en construcción | Loguear error |
-| `502` | N/A | Bad Gateway | Respuesta inválida de servicio interno | Pedir reintentar |
-| `503` | N/A | Service Unavailable | Mantenimiento o sobrecarga | 🛠️ "Servidor en mantenimiento." |
-| `504` | N/A | Gateway Timeout | Timeout del backend | "La operación está tardando más de lo esperado." |
+| Code | Condition | Name | Description | Interceptor Action |
+|------|-----------|------|-------------|-------------------|
+| `0` | `!navigator.onLine` | Offline / No Network | No internet connection | 📡 "No internet connection. Check your network." |
+| `0` | `navigator.onLine` | Unknown / CORS / Down | Server down or CORS | ⚠️ "Could not contact the server." |
+| `400` | N/A | Bad Request | Invalid syntax or malformed JSON | Show `error.message` from backend |
+| `401` | N/A | Unauthorized | Expired or missing token | 🔒 Refresh Token or redirect to Login |
+| `403` | N/A | Forbidden | No permissions for this resource | ⛔ "You don't have permission for this action." |
+| `404` | N/A | Not Found | Resource doesn't exist | Redirect to 404 or show message |
+| `405` | N/A | Method Not Allowed | Wrong HTTP method | Log to console (dev error) |
+| `408` | N/A | Request Timeout | Client took too long | Suggest retry |
+| `409` | N/A | Conflict | Duplicate record | Show specific error in form |
+| `422` | N/A | Unprocessable Entity | Validation error | Map errors to form fields |
+| `429` | N/A | Too Many Requests | Rate limiting exceeded | ⏳ Block button temporarily |
+| `500` | N/A | Internal Server Error | Backend bug | 🔥 "Internal server error. Try again later." |
+| `501` | N/A | Not Implemented | Endpoint under construction | Log error |
+| `502` | N/A | Bad Gateway | Invalid response from internal service | Ask to retry |
+| `503` | N/A | Service Unavailable | Maintenance or overload | 🛠️ "Server under maintenance." |
+| `504` | N/A | Gateway Timeout | Backend timeout | "The operation is taking longer than expected." |
 
 #### Complete Error Interceptor Implementation
 
@@ -252,7 +351,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      let message = 'Error desconocido';
+      let message = 'Unknown error';
       let duration = 5000;
       let shouldNavigate = false;
       let navigateTo = '';
@@ -260,59 +359,59 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       // Handle offline / network errors (status 0)
       if (error.status === 0) {
         if (!navigator.onLine) {
-          message = '📡 Sin conexión a internet. Verifique su red.';
+          message = '📡 No internet connection. Check your network.';
         } else {
-          message = '⚠️ No se pudo contactar con el servidor.';
+          message = '⚠️ Could not contact the server.';
         }
       } else {
         switch (error.status) {
           case 400:
-            message = error.error?.message || 'Solicitud inválida.';
+            message = error.error?.message || 'Invalid request.';
             break;
           case 401:
-            message = '🔒 Sesión expirada. Inicie sesión nuevamente.';
+            message = '🔒 Session expired. Please log in again.';
             shouldNavigate = true;
             navigateTo = '/login';
             // TODO: Implement refresh token logic here
             break;
           case 403:
-            message = '⛔ No tiene permisos para realizar esta acción.';
+            message = '⛔ You don\'t have permission for this action.';
             break;
           case 404:
-            message = 'El recurso solicitado no existe.';
+            message = 'The requested resource does not exist.';
             break;
           case 405:
             console.error('[DEV] Method Not Allowed:', req.method, req.url);
-            message = 'Error de configuración (405).';
+            message = 'Configuration error (405).';
             break;
           case 408:
-            message = 'La solicitud tardó demasiado. Intente nuevamente.';
+            message = 'The request took too long. Please try again.';
             break;
           case 409:
-            message = error.error?.message || 'Conflicto: el registro ya existe.';
+            message = error.error?.message || 'Conflict: record already exists.';
             break;
           case 422:
             // Validation errors - don't show snackbar, let form handle it
             return throwError(() => error);
           case 429:
-            message = '⏳ Demasiadas solicitudes. Espere un momento.';
+            message = '⏳ Too many requests. Please wait a moment.';
             duration = 10000;
             break;
           case 500:
-            message = '🔥 Error interno del servidor. Intente más tarde.';
+            message = '🔥 Internal server error. Try again later.';
             break;
           case 501:
             console.warn('[DEV] Not Implemented:', req.url);
-            message = 'Funcionalidad no disponible.';
+            message = 'Feature not available.';
             break;
           case 502:
-            message = 'Error de conexión con servicios internos.';
+            message = 'Connection error with internal services.';
             break;
           case 503:
-            message = '🛠️ Servidor en mantenimiento. Intente en unos minutos.';
+            message = '🛠️ Server under maintenance. Try again in a few minutes.';
             break;
           case 504:
-            message = 'La operación está tardando más de lo esperado.';
+            message = 'The operation is taking longer than expected.';
             break;
           default:
             message = error.error?.message || `Error ${error.status}`;
@@ -320,7 +419,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       // Show snackbar notification
-      snackBar.open(message, 'Cerrar', {
+      snackBar.open(message, 'Close', {
         duration,
         panelClass: error.status >= 500 ? ['error-snackbar-critical'] : ['error-snackbar']
       });
@@ -365,7 +464,93 @@ export const appConfig: ApplicationConfig = {
 ```
 
 
-## 1.5 Internationalization (i18n)
+## 1.5 Navigation & Layout (CRITICAL for UX)
+
+> [!IMPORTANT]
+> **All VB6 migrations MUST include a proper navigation system.** VB6 apps use menus/MDI - modern apps need sidebar navigation.
+
+### Layout Component Pattern (Required)
+```typescript
+// components/layout/layout.component.ts
+@Component({
+  selector: 'app-layout',
+  standalone: true,
+  imports: [CommonModule, RouterModule, RouterOutlet],
+  templateUrl: './layout.component.html',
+  styleUrl: './layout.component.css'
+})
+export class LayoutComponent {
+  private auth = inject(AuthService);
+  
+  navItems = [
+    { path: '/dashboard', icon: '📊', label: 'Dashboard' },
+    { path: '/clientes', icon: '👥', label: 'Clientes' },
+    { path: '/libros', icon: '📚', label: 'Libros' },
+    { path: '/prestamos', icon: '📤', label: 'Préstamos' },
+  ];
+
+  logout() {
+    this.auth.logout();
+    window.location.href = '/login';
+  }
+}
+```
+
+### Layout Template
+```html
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">📚</span>
+      <h1>App Name</h1>
+    </div>
+    <nav class="sidebar-nav">
+      @for (item of navItems; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">🚪 Cerrar Sesión</button>
+    </div>
+  </aside>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>
+```
+
+### Routes with Layout (Nested Children)
+```typescript
+export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
+  // Protected routes wrapped in layout
+  {
+    path: '',
+    loadComponent: () => import('./components/layout/layout.component').then(m => m.LayoutComponent),
+    canActivate: [() => authGuard()],
+    children: [
+      { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'clientes', loadComponent: () => import('./components/clientes/clientes-list.component').then(m => m.ClientesListComponent) },
+      // ... more child routes
+    ]
+  },
+  { path: '**', redirectTo: 'login' }
+];
+```
+
+> [!TIP]
+> **VB6 Menu → Sidebar Mapping:**
+> - `mnuFile` → Dashboard/Home
+> - `mnuClientes` → /clientes
+> - `mnuLibros` → /libros
+> - `mnuPrestamos` → /prestamos
+> - `mnuSalir` → Logout button in sidebar footer
+
+## 1.6 Internationalization (i18n)
 
 ```typescript
 // Add to app.config.ts
@@ -388,22 +573,22 @@ export const appConfig: ApplicationConfig = {
 ```
 src/app/
 ├── components/
-│   ├── socios/
-│   │   ├── socios.component.ts       # List + Table
-│   │   ├── socios.component.html
-│   │   └── socios.component.scss
-│   ├── socio-dialog/
-│   │   ├── socio-dialog.component.ts # Create/Edit Modal
-│   │   ├── socio-dialog.component.html
-│   │   └── socio-dialog.component.scss
+│   ├── members/
+│   │   ├── members.component.ts       # List + Table
+│   │   ├── members.component.html
+│   │   └── members.component.scss
+│   ├── member-dialog/
+│   │   ├── member-dialog.component.ts # Create/Edit Modal
+│   │   ├── member-dialog.component.html
+│   │   └── member-dialog.component.scss
 │   └── shared/
 │       ├── confirm-dialog/           # Reusable confirm
 │       └── loading-spinner/          # Reusable spinner
 ├── services/
-│   ├── socios.service.ts
+│   ├── members.service.ts
 │   └── auth.service.ts
 ├── models/
-│   ├── socio.model.ts
+│   ├── member.model.ts
 │   └── index.ts
 ├── interceptors/
 │   └── error.interceptor.ts
@@ -424,17 +609,17 @@ backend/
 ├── src/
 │   ├── routes/
 │   │   ├── index.ts          # Route aggregator
-│   │   ├── socios.routes.ts
-│   │   └── libros.routes.ts
+│   │   ├── members.routes.ts
+│   │   └── books.routes.ts
 │   ├── controllers/
-│   │   ├── socios.controller.ts
-│   │   └── libros.controller.ts
+│   │   ├── members.controller.ts
+│   │   └── books.controller.ts
 │   ├── services/
-│   │   ├── socios.service.ts
-│   │   └── libros.service.ts
+│   │   ├── members.service.ts
+│   │   └── books.service.ts
 │   ├── types/
 │   │   ├── index.ts
-│   │   └── socios.dto.ts
+│   │   └── members.dto.ts
 │   ├── middlewares/
 │   │   ├── error.middleware.ts
 │   │   └── logging.middleware.ts
@@ -456,33 +641,33 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Socio {
+model Member {
   id        Int       @id @default(autoincrement())
-  nombre    String
-  direccion String?
-  telefono  String?
+  name      String
+  address   String?
+  phone     String?
   email     String?
-  fechaAlta DateTime  @default(now())
-  prestamos Prestamo[]
+  createdAt DateTime  @default(now())
+  loans     Loan[]
 }
 
-model Libro {
+model Book {
   id        Int       @id @default(autoincrement())
-  titulo    String
-  autor     String
+  title     String
+  author    String
   isbn      String?   @unique
-  prestamos Prestamo[]
+  loans     Loan[]
 }
 
-model Prestamo {
+model Loan {
   id          Int       @id @default(autoincrement())
-  socioId     Int
-  libroId     Int
-  fechaInicio DateTime  @default(now())
-  fechaFin    DateTime?
-  devuelto    Boolean   @default(false)
-  socio       Socio     @relation(fields: [socioId], references: [id])
-  libro       Libro     @relation(fields: [libroId], references: [id])
+  memberId    Int
+  bookId      Int
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
+  returned    Boolean   @default(false)
+  member      Member    @relation(fields: [memberId], references: [id])
+  book        Book      @relation(fields: [bookId], references: [id])
 }
 ```
 
@@ -529,57 +714,57 @@ app.listen(PORT, () => {
 ## 2.4 Service Layer Pattern
 
 ```typescript
-// src/services/socios.service.ts
-import { PrismaClient, Socio } from '@prisma/client';
-import { CreateSocioDto, UpdateSocioDto } from '../types';
+// src/services/members.service.ts
+import { PrismaClient, Member } from '@prisma/client';
+import { CreateMemberDto, UpdateMemberDto } from '../types';
 
 const prisma = new PrismaClient();
 
-export class SociosService {
-  async findAll(): Promise<Socio[]> {
-    return prisma.socio.findMany({
-      orderBy: { nombre: 'asc' }
+export class MembersService {
+  async findAll(): Promise<Member[]> {
+    return prisma.member.findMany({
+      orderBy: { name: 'asc' }
     });
   }
 
-  async findOne(id: number): Promise<Socio | null> {
-    return prisma.socio.findUnique({
+  async findOne(id: number): Promise<Member | null> {
+    return prisma.member.findUnique({
       where: { id },
-      include: { prestamos: true }
+      include: { loans: true }
     });
   }
 
-  async create(data: CreateSocioDto): Promise<Socio> {
-    return prisma.socio.create({ data });
+  async create(data: CreateMemberDto): Promise<Member> {
+    return prisma.member.create({ data });
   }
 
-  async update(id: number, data: UpdateSocioDto): Promise<Socio> {
-    return prisma.socio.update({
+  async update(id: number, data: UpdateMemberDto): Promise<Member> {
+    return prisma.member.update({
       where: { id },
       data
     });
   }
 
   async delete(id: number): Promise<void> {
-    await prisma.socio.delete({ where: { id } });
+    await prisma.member.delete({ where: { id } });
   }
 }
 
-export const sociosService = new SociosService();
+export const membersService = new MembersService();
 ```
 
 ## 2.5 Controller Layer Pattern
 
 ```typescript
-// src/controllers/socios.controller.ts
+// src/controllers/members.controller.ts
 import { Request, Response, NextFunction } from 'express';
-import { sociosService } from '../services/socios.service';
+import { membersService } from '../services/members.service';
 
-export class SociosController {
+export class MembersController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const socios = await sociosService.findAll();
-      res.json(socios);
+      const members = await membersService.findAll();
+      res.json(members);
     } catch (error) {
       next(error);
     }
@@ -588,11 +773,11 @@ export class SociosController {
   async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id);
-      const socio = await sociosService.findOne(id);
-      if (!socio) {
-        return res.status(404).json({ message: 'Socio no encontrado' });
+      const member = await membersService.findOne(id);
+      if (!member) {
+        return res.status(404).json({ message: 'Member not found' });
       }
-      res.json(socio);
+      res.json(member);
     } catch (error) {
       next(error);
     }
@@ -600,8 +785,8 @@ export class SociosController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const socio = await sociosService.create(req.body);
-      res.status(201).json(socio);
+      const member = await membersService.create(req.body);
+      res.status(201).json(member);
     } catch (error) {
       next(error);
     }
@@ -610,8 +795,8 @@ export class SociosController {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id);
-      const socio = await sociosService.update(id, req.body);
-      res.json(socio);
+      const member = await membersService.update(id, req.body);
+      res.json(member);
     } catch (error) {
       next(error);
     }
@@ -620,7 +805,7 @@ export class SociosController {
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id);
-      await sociosService.delete(id);
+      await membersService.delete(id);
       res.status(204).send();
     } catch (error) {
       next(error);
@@ -628,36 +813,36 @@ export class SociosController {
   }
 }
 
-export const sociosController = new SociosController();
+export const membersController = new MembersController();
 ```
 
 ## 2.6 Routes with Swagger
 
 ```typescript
-// src/routes/socios.routes.ts
+// src/routes/members.routes.ts
 import { Router } from 'express';
-import { sociosController } from '../controllers/socios.controller';
+import { membersController } from '../controllers/members.controller';
 
 const router = Router();
 
 /**
  * @swagger
- * /api/socios:
+ * /api/members:
  *   get:
- *     summary: Obtener todos los socios
- *     tags: [Socios]
+ *     summary: Get all members
+ *     tags: [Members]
  *     responses:
  *       200:
- *         description: Lista de socios
+ *         description: List of members
  */
-router.get('/', sociosController.getAll);
+router.get('/', membersController.getAll);
 
 /**
  * @swagger
- * /api/socios/{id}:
+ * /api/members/{id}:
  *   get:
- *     summary: Obtener socio por ID
- *     tags: [Socios]
+ *     summary: Get member by ID
+ *     tags: [Members]
  *     parameters:
  *       - in: path
  *         name: id
@@ -666,40 +851,40 @@ router.get('/', sociosController.getAll);
  *           type: integer
  *     responses:
  *       200:
- *         description: Socio encontrado
+ *         description: Member found
  *       404:
- *         description: Socio no encontrado
+ *         description: Member not found
  */
-router.get('/:id', sociosController.getById);
+router.get('/:id', membersController.getById);
 
 /**
  * @swagger
- * /api/socios:
+ * /api/members:
  *   post:
- *     summary: Crear nuevo socio
- *     tags: [Socios]
+ *     summary: Create new member
+ *     tags: [Members]
  */
-router.post('/', sociosController.create);
+router.post('/', membersController.create);
 
 /**
  * @swagger
- * /api/socios/{id}:
+ * /api/members/{id}:
  *   put:
- *     summary: Actualizar socio
- *     tags: [Socios]
+ *     summary: Update member
+ *     tags: [Members]
  */
-router.put('/:id', sociosController.update);
+router.put('/:id', membersController.update);
 
 /**
  * @swagger
- * /api/socios/{id}:
+ * /api/members/{id}:
  *   delete:
- *     summary: Eliminar socio
- *     tags: [Socios]
+ *     summary: Delete member
+ *     tags: [Members]
  */
-router.delete('/:id', sociosController.delete);
+router.delete('/:id', membersController.delete);
 
-export const sociosRoutes = router;
+export const membersRoutes = router;
 ```
 
 ## 2.7 Error Middleware
@@ -721,19 +906,19 @@ export function errorMiddleware(
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === 'P2002') {
       return res.status(409).json({
-        message: 'Ya existe un registro con estos datos'
+        message: 'A record with this data already exists'
       });
     }
     if (error.code === 'P2025') {
       return res.status(404).json({
-        message: 'Registro no encontrado'
+        message: 'Record not found'
       });
     }
   }
 
   // Default error
   res.status(500).json({
-    message: 'Error interno del servidor',
+    message: 'Internal server error',
     error: process.env.NODE_ENV === 'development' ? error.message : undefined
   });
 }
@@ -749,9 +934,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Biblioteca API',
+      title: 'Library API',
       version: '1.0.0',
-      description: 'API REST para gestión de biblioteca'
+      description: 'REST API for library management'
     },
     servers: [
       { url: 'http://localhost:3000' }
@@ -767,17 +952,17 @@ export const swaggerSpec = swaggerJsdoc(options);
 
 # 3. 📋 VB6 → Modern Mapping Reference
 
-| VB6 Concept | Modern Equivalent |
-|-------------|-------------------|
-| `Form_Load` | `ngOnInit()` |
-| `cmdButton_Click` | `(click)="method()"` |
-| `txtField.Text` | `formControl.value` |
-| `MSFlexGrid` | `mat-table` |
-| `DataCombo` | `mat-select` + async data |
-| `MsgBox` | `MatSnackBar` |
-| `InputBox` | `MatDialog` |
-| `Form.Show vbModal` | `MatDialog.open()` |
-| `ADODB.Connection` | Prisma Client |
-| `Recordset.AddNew` | `prisma.entity.create()` |
-| `DoEvents` | Remove (async by default) |
-| `Timer` | `setInterval` / RxJS |
+| VB6 Concept | Modern Equivalent | Migration Path |
+|-------------|-------------------|----------------|
+| `Form_Load` | `ngOnInit()` | Direct map |
+| `cmdButton_Click` | `(click)="method()"` | Direct map |
+| `txtField.Text` | `formControl.value` | Reactive forms |
+| `MSFlexGrid` | `mat-table` | Angular Material |
+| `DataCombo` | `mat-select` + async data | Angular Material |
+| `MsgBox` | `MatSnackBar` | UI update |
+| `InputBox` | `MatDialog` | Custom dialog |
+| `Form.Show vbModal` | `MatDialog.open()` | Direct map |
+| `ADODB.Connection` | Prisma Client | ORM pattern |
+| `Recordset.AddNew` | `prisma.entity.create()` | CRUD mapping |
+| `DoEvents` | Remove | Async by default |
+| `Timer` | `setInterval` / RxJS | JS equivalent |

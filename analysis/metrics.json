@@ -1,0 +1,2480 @@
+{
+  "summary": {
+    "total_files": 9,
+    "total_loc": 2116,
+    "total_comment_lines": 10,
+    "comment_ratio": 0.47,
+    "total_functions": 151,
+    "average_complexity": 2.65,
+    "average_loc_per_file": 235.11,
+    "complexity_distribution": {
+      "low": 133,
+      "medium": 13,
+      "high": 3,
+      "very_high": 2
+    },
+    "risk_score": 56
+  },
+  "files": [
+    {
+      "name": "Form1.frm",
+      "path": "vb6-apps\\Biblioteca\\Form1.frm",
+      "type": ".frm",
+      "loc": 17,
+      "blank_lines": 1,
+      "comment_lines": 0,
+      "comment_ratio": 0.0,
+      "control_count": 1,
+      "function_count": 0,
+      "total_complexity": 0,
+      "average_complexity": 0.0,
+      "max_nesting_depth": 0,
+      "on_error_resume_next": 0,
+      "on_error_goto": 0,
+      "functions": []
+    },
+    {
+      "name": "Form2.frm",
+      "path": "vb6-apps\\Biblioteca\\Form2.frm",
+      "type": ".frm",
+      "loc": 29,
+      "blank_lines": 2,
+      "comment_lines": 1,
+      "comment_ratio": 3.45,
+      "control_count": 2,
+      "function_count": 1,
+      "total_complexity": 1,
+      "average_complexity": 1.0,
+      "max_nesting_depth": 0,
+      "on_error_resume_next": 0,
+      "on_error_goto": 0,
+      "functions": [
+        {
+          "name": "Form_Load",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        }
+      ]
+    },
+    {
+      "name": "FORM7.FRM",
+      "path": "vb6-apps\\Biblioteca\\FORM7.FRM",
+      "type": ".frm",
+      "loc": 87,
+      "blank_lines": 8,
+      "comment_lines": 0,
+      "comment_ratio": 0.0,
+      "control_count": 5,
+      "function_count": 7,
+      "total_complexity": 13,
+      "average_complexity": 1.86,
+      "max_nesting_depth": 5,
+      "on_error_resume_next": 0,
+      "on_error_goto": 0,
+      "functions": [
+        {
+          "name": "cmdace_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 17
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "cmdsal_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Form_Load",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "txtlog_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 2
+        }
+      ]
+    },
+    {
+      "name": "frmAYUDA.frm",
+      "path": "vb6-apps\\Biblioteca\\frmAYUDA.frm",
+      "type": ".frm",
+      "loc": 51,
+      "blank_lines": 1,
+      "comment_lines": 0,
+      "comment_ratio": 0.0,
+      "control_count": 2,
+      "function_count": 1,
+      "total_complexity": 1,
+      "average_complexity": 1.0,
+      "max_nesting_depth": 0,
+      "on_error_resume_next": 0,
+      "on_error_goto": 0,
+      "functions": [
+        {
+          "name": "Form_Load",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        }
+      ]
+    },
+    {
+      "name": "FRMCLI.FRM",
+      "path": "vb6-apps\\Biblioteca\\FRMCLI.FRM",
+      "type": ".frm",
+      "loc": 691,
+      "blank_lines": 42,
+      "comment_lines": 4,
+      "comment_ratio": 0.58,
+      "control_count": 31,
+      "function_count": 54,
+      "total_complexity": 137,
+      "average_complexity": 2.54,
+      "max_nesting_depth": 37,
+      "on_error_resume_next": 0,
+      "on_error_goto": 2,
+      "functions": [
+        {
+          "name": "cmdbus_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 20
+        },
+        {
+          "name": "cmdbor_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 20
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "cmdcan_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "cmdmod_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 10
+        },
+        {
+          "name": "cmdnue_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 10
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 33
+        },
+        {
+          "name": "cmdreg_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 33
+        },
+        {
+          "name": "xerror",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "End",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "cmdsal_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Command2_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Command3_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Command4_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Form_Activate",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 16
+        },
+        {
+          "name": "grilla_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 16
+        },
+        {
+          "name": "txtid",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 13
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 14,
+          "complexity_level": "HIGH",
+          "loc": 38
+        },
+        {
+          "name": "Command1_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 14,
+          "complexity_level": "HIGH",
+          "loc": 38
+        },
+        {
+          "name": "xerror",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "fgrilla",
+          "type": "Sub",
+          "visibility": "Public",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 11
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "TxtTel_Change",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "txtdir_Change",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "txtDNGA_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "txttel_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Txtdni_Change",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "Txtdni_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "TxtApe_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 4,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "TxtDir_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 4,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Txtnom_Change",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Txtnom_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "txtbape_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "txtbleg_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        }
+      ]
+    },
+    {
+      "name": "FRMLIB.FRM",
+      "path": "vb6-apps\\Biblioteca\\FRMLIB.FRM",
+      "type": ".frm",
+      "loc": 830,
+      "blank_lines": 41,
+      "comment_lines": 5,
+      "comment_ratio": 0.6,
+      "control_count": 41,
+      "function_count": 52,
+      "total_complexity": 154,
+      "average_complexity": 2.96,
+      "max_nesting_depth": 42,
+      "on_error_resume_next": 0,
+      "on_error_goto": 2,
+      "functions": [
+        {
+          "name": "cmdbus_Click",
+          "type": "Sub",
+          "visibility": "Public",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 20
+        },
+        {
+          "name": "cmdbor_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 20
+        },
+        {
+          "name": "Public",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "cmdcan_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "cmdmod_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 10
+        },
+        {
+          "name": "cmdnue_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 10
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "cmdpres_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 36
+        },
+        {
+          "name": "cmdreg_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 6,
+          "complexity_level": "MEDIUM",
+          "loc": 36
+        },
+        {
+          "name": "xerror",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "End",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "cmdsal_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Command2_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Command3_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 9
+        },
+        {
+          "name": "Command4_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 9
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 9
+        },
+        {
+          "name": "Command5_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 9
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Command6_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Form_Activate",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 25
+        },
+        {
+          "name": "grilla_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 25
+        },
+        {
+          "name": "txtid",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 22
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 23,
+          "complexity_level": "VERY_HIGH",
+          "loc": 50
+        },
+        {
+          "name": "Command1_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 23,
+          "complexity_level": "VERY_HIGH",
+          "loc": 50
+        },
+        {
+          "name": "xerror",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "fgrilla",
+          "type": "Sub",
+          "visibility": "Public",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 13
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "TxtApe_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 4,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "TxtDir_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 4,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 4,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "txtesta_Change",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 4,
+          "complexity_level": "LOW",
+          "loc": 6
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 10
+        },
+        {
+          "name": "txtesta_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 10
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Txtnom_Change",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 4
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Txtnom_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "txtbape_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "txtbleg_KeyPress",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 5
+        }
+      ]
+    },
+    {
+      "name": "FrmPres.frm",
+      "path": "vb6-apps\\Biblioteca\\FrmPres.frm",
+      "type": ".frm",
+      "loc": 238,
+      "blank_lines": 8,
+      "comment_lines": 0,
+      "comment_ratio": 0.0,
+      "control_count": 17,
+      "function_count": 10,
+      "total_complexity": 43,
+      "average_complexity": 4.3,
+      "max_nesting_depth": 12,
+      "on_error_resume_next": 0,
+      "on_error_goto": 0,
+      "functions": [
+        {
+          "name": "cmdcons_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 13,
+          "complexity_level": "HIGH",
+          "loc": 40
+        },
+        {
+          "name": "End",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 8,
+          "complexity_level": "MEDIUM",
+          "loc": 28
+        },
+        {
+          "name": "End",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 1
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 7,
+          "complexity_level": "MEDIUM",
+          "loc": 19
+        },
+        {
+          "name": "cmdreg_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 7,
+          "complexity_level": "MEDIUM",
+          "loc": 19
+        },
+        {
+          "name": "End",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Command1_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Command4_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        }
+      ]
+    },
+    {
+      "name": "MDIForm1.frm",
+      "path": "vb6-apps\\Biblioteca\\MDIForm1.frm",
+      "type": ".frm",
+      "loc": 83,
+      "blank_lines": 9,
+      "comment_lines": 0,
+      "comment_ratio": 0.0,
+      "control_count": 12,
+      "function_count": 15,
+      "total_complexity": 15,
+      "average_complexity": 1.0,
+      "max_nesting_depth": 0,
+      "on_error_resume_next": 0,
+      "on_error_goto": 0,
+      "functions": [
+        {
+          "name": "ayuda_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "bd_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "BuscaL_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "cargal_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "cerses_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "pass_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "salir_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Private",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "socios_Click",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        }
+      ]
+    },
+    {
+      "name": "Module1.bas",
+      "path": "vb6-apps\\Biblioteca\\Module1.bas",
+      "type": ".bas",
+      "loc": 90,
+      "blank_lines": 14,
+      "comment_lines": 0,
+      "comment_ratio": 0.0,
+      "control_count": 0,
+      "function_count": 11,
+      "total_complexity": 36,
+      "average_complexity": 3.27,
+      "max_nesting_depth": 7,
+      "on_error_resume_next": 0,
+      "on_error_goto": 0,
+      "functions": [
+        {
+          "name": "sinum",
+          "type": "Function",
+          "visibility": "Public",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "Public",
+          "type": "Function",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "limpia",
+          "type": "Function",
+          "visibility": "Private",
+          "complexity": 3,
+          "complexity_level": "LOW",
+          "loc": 5
+        },
+        {
+          "name": "Public",
+          "type": "Function",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "ini",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 3
+        },
+        {
+          "name": "Public",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "fin",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 1,
+          "complexity_level": "LOW",
+          "loc": 2
+        },
+        {
+          "name": "Public",
+          "type": "Sub",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "silet",
+          "type": "Function",
+          "visibility": "Private",
+          "complexity": 2,
+          "complexity_level": "LOW",
+          "loc": 8
+        },
+        {
+          "name": "Public",
+          "type": "Function",
+          "visibility": "Private",
+          "complexity": 9,
+          "complexity_level": "MEDIUM",
+          "loc": 54
+        },
+        {
+          "name": "mancmd",
+          "type": "Function",
+          "visibility": "Private",
+          "complexity": 9,
+          "complexity_level": "MEDIUM",
+          "loc": 54
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "Form_Load",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "cmdace_Click",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 17
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "cmdsal_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Form_Load",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "txtlog_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Form_Load",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "cmdbus_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 20
+    },
+    {
+      "name": "cmdbor_Click",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 20
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "cmdcan_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "cmdmod_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 10
+    },
+    {
+      "name": "cmdnue_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 10
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 33
+    },
+    {
+      "name": "cmdreg_Click",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 33
+    },
+    {
+      "name": "xerror",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "End",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "cmdsal_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Command2_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Command3_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Command4_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Form_Activate",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 16
+    },
+    {
+      "name": "grilla_Click",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 16
+    },
+    {
+      "name": "txtid",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 13
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 14,
+      "complexity_level": "HIGH",
+      "loc": 38
+    },
+    {
+      "name": "Command1_Click",
+      "file": "current",
+      "complexity": 14,
+      "complexity_level": "HIGH",
+      "loc": 38
+    },
+    {
+      "name": "xerror",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "fgrilla",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 11
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "TxtTel_Change",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "txtdir_Change",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "txtDNGA_KeyPress",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "txttel_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Txtdni_Change",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "Txtdni_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "TxtApe_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 4,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "TxtDir_KeyPress",
+      "file": "current",
+      "complexity": 4,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Txtnom_Change",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Txtnom_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "txtbape_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "txtbleg_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "cmdbus_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 20
+    },
+    {
+      "name": "cmdbor_Click",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 20
+    },
+    {
+      "name": "Public",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "cmdcan_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "cmdmod_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 10
+    },
+    {
+      "name": "cmdnue_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 10
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "cmdpres_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 36
+    },
+    {
+      "name": "cmdreg_Click",
+      "file": "current",
+      "complexity": 6,
+      "complexity_level": "MEDIUM",
+      "loc": 36
+    },
+    {
+      "name": "xerror",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "End",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "cmdsal_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Command2_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Command3_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 9
+    },
+    {
+      "name": "Command4_Click",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 9
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 9
+    },
+    {
+      "name": "Command5_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 9
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Command6_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Form_Activate",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 25
+    },
+    {
+      "name": "grilla_Click",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 25
+    },
+    {
+      "name": "txtid",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 22
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 23,
+      "complexity_level": "VERY_HIGH",
+      "loc": 50
+    },
+    {
+      "name": "Command1_Click",
+      "file": "current",
+      "complexity": 23,
+      "complexity_level": "VERY_HIGH",
+      "loc": 50
+    },
+    {
+      "name": "xerror",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "fgrilla",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 13
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "TxtApe_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 4,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "TxtDir_KeyPress",
+      "file": "current",
+      "complexity": 4,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 4,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "txtesta_Change",
+      "file": "current",
+      "complexity": 4,
+      "complexity_level": "LOW",
+      "loc": 6
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 10
+    },
+    {
+      "name": "txtesta_KeyPress",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 10
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Txtnom_Change",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 4
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Txtnom_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "txtbape_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "txtbleg_KeyPress",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "cmdcons_Click",
+      "file": "current",
+      "complexity": 13,
+      "complexity_level": "HIGH",
+      "loc": 40
+    },
+    {
+      "name": "End",
+      "file": "current",
+      "complexity": 8,
+      "complexity_level": "MEDIUM",
+      "loc": 28
+    },
+    {
+      "name": "End",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 1
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 7,
+      "complexity_level": "MEDIUM",
+      "loc": 19
+    },
+    {
+      "name": "cmdreg_Click",
+      "file": "current",
+      "complexity": 7,
+      "complexity_level": "MEDIUM",
+      "loc": 19
+    },
+    {
+      "name": "End",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Command1_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Command4_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "ayuda_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "bd_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "BuscaL_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "cargal_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "cerses_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "pass_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "salir_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Private",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "socios_Click",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "sinum",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "Public",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "limpia",
+      "file": "current",
+      "complexity": 3,
+      "complexity_level": "LOW",
+      "loc": 5
+    },
+    {
+      "name": "Public",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "ini",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 3
+    },
+    {
+      "name": "Public",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "fin",
+      "file": "current",
+      "complexity": 1,
+      "complexity_level": "LOW",
+      "loc": 2
+    },
+    {
+      "name": "Public",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "silet",
+      "file": "current",
+      "complexity": 2,
+      "complexity_level": "LOW",
+      "loc": 8
+    },
+    {
+      "name": "Public",
+      "file": "current",
+      "complexity": 9,
+      "complexity_level": "MEDIUM",
+      "loc": 54
+    },
+    {
+      "name": "mancmd",
+      "file": "current",
+      "complexity": 9,
+      "complexity_level": "MEDIUM",
+      "loc": 54
+    }
+  ],
+  "complexity_distribution": {
+    "low": 133,
+    "medium": 13,
+    "high": 3,
+    "very_high": 2
+  },
+  "risk_indicators": [
+    {
+      "file": "FRMCLI.FRM",
+      "type": "Deep Nesting",
+      "count": 37,
+      "risk": "MEDIUM"
+    },
+    {
+      "file": "FRMLIB.FRM",
+      "type": "Deep Nesting",
+      "count": 42,
+      "risk": "MEDIUM"
+    },
+    {
+      "file": "FrmPres.frm",
+      "type": "Deep Nesting",
+      "count": 12,
+      "risk": "MEDIUM"
+    },
+    {
+      "file": "Module1.bas",
+      "type": "Deep Nesting",
+      "count": 7,
+      "risk": "MEDIUM"
+    }
+  ]
+}

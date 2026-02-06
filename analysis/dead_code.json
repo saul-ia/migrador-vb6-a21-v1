@@ -1,0 +1,215 @@
+{
+  "summary": {
+    "total_functions_declared": 49,
+    "dead_functions": 27,
+    "total_forms": 8,
+    "orphan_forms": 2,
+    "total_globals": 2,
+    "unused_globals": 0,
+    "dead_code_percentage": 55.1
+  },
+  "dead_functions": [
+    {
+      "name": "FORM7.cmdace_Click",
+      "file": "FORM7.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FORM7.txtlog_KeyPress",
+      "file": "FORM7.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMCLI.TxtTel_Change",
+      "file": "FRMCLI.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMCLI.txtdir_Change",
+      "file": "FRMCLI.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMCLI.txtDNGA_KeyPress",
+      "file": "FRMCLI.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMCLI.txttel_KeyPress",
+      "file": "FRMCLI.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMCLI.Txtdni_Change",
+      "file": "FRMCLI.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMCLI.Txtdni_KeyPress",
+      "file": "FRMCLI.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMLIB.cmdpres_Click",
+      "file": "FRMLIB.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMLIB.Command5_Click",
+      "file": "FRMLIB.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMLIB.Command6_Click",
+      "file": "FRMLIB.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMLIB.txtesta_Change",
+      "file": "FRMLIB.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FRMLIB.txtesta_KeyPress",
+      "file": "FRMLIB.FRM",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "FrmPres.cmdcons_Click",
+      "file": "FrmPres.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.ayuda_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.bd_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.BuscaL_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.cargal_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.cerses_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.pass_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.salir_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "MDIForm1.socios_Click",
+      "file": "MDIForm1.frm",
+      "type": "Sub",
+      "visibility": "Private",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "Module1.limpia",
+      "file": "Module1.bas",
+      "type": "Function",
+      "visibility": "Public",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "Module1.ini",
+      "file": "Module1.bas",
+      "type": "Sub",
+      "visibility": "Public",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "Module1.fin",
+      "file": "Module1.bas",
+      "type": "Sub",
+      "visibility": "Public",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "Module1.silet",
+      "file": "Module1.bas",
+      "type": "Function",
+      "visibility": "Public",
+      "recommendation": "Review and remove if truly unused"
+    },
+    {
+      "name": "Module1.mancmd",
+      "file": "Module1.bas",
+      "type": "Function",
+      "visibility": "Public",
+      "recommendation": "Review and remove if truly unused"
+    }
+  ],
+  "orphan_forms": [
+    {
+      "name": "form7",
+      "file": "vb6-apps\\Biblioteca\\FORM7.FRM",
+      "recommendation": "Check if startup form or truly orphaned"
+    },
+    {
+      "name": "mdiform1",
+      "file": "vb6-apps\\Biblioteca\\MDIForm1.frm",
+      "recommendation": "Check if startup form or truly orphaned"
+    }
+  ],
+  "unused_globals": []
+}

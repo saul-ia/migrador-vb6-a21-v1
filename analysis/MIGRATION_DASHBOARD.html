@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration System Dashboard</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --accent: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--bg-card);
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+            background: var(--bg-card);
+        }
+
+        nav a:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .icon {
+            font-size: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            border-left: 4px solid var(--accent);
+        }
+
+        .card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.agent {
+            border-left-color: var(--accent-purple);
+        }
+
+        .card.workflow {
+            border-left-color: var(--accent-green);
+        }
+
+        .card.skill {
+            border-left-color: var(--accent-orange);
+        }
+
+        .card.script {
+            border-left-color: var(--accent);
+        }
+
+        .card.rule {
+            border-left-color: var(--accent-red);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .badge-purple {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent-purple);
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+
+        .badge-orange {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-orange);
+        }
+
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        #flow-diagram,
+        #dependency-diagram {
+            width: 100%;
+            height: 500px;
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+        }
+
+        .vuln-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1));
+            border: 1px solid var(--accent-orange);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vuln-card h4 {
+            color: var(--accent-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .vuln-card .solution {
+            color: var(--accent-green);
+            margin-top: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-card);
+        }
+
+        th {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        tr:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .priority-critical {
+            color: var(--accent-red);
+        }
+
+        .priority-high {
+            color: var(--accent-orange);
+        }
+
+        .priority-medium {
+            color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--bg-card);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🚀 VB6 to Angular Migration System</h1>
+        <p class="subtitle">Interactive Dashboard • Self-Healing • Fully Automated</p>
+    </header>
+
+    <nav>
+        <a href="#overview">📊 Overview</a>
+        <a href="#flow">🔄 Flow</a>
+        <a href="#agents">🤖 Agents</a>
+        <a href="#workflows">⚡ Workflows</a>
+        <a href="#skills">🛠️ Skills</a>
+        <a href="#scripts">📜 Scripts</a>
+        <a href="#rules">📋 Rules</a>
+        <a href="#vulnerabilities">⚠️ Vulnerabilities</a>
+    </nav>
+
+    <div class="container">
+        <section id="overview">
+            <h2><span class="icon">📊</span> System Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Agents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Workflows</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Skills</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">13</div>
+                    <div class="stat-label">Scripts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Rules File</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Max Iterations</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="flow">
+            <h2><span class="icon">🔄</span> Self-Healing Migration Flow</h2>
+            <div id="flow-diagram"></div>
+        </section>
+
+        <section id="agents">
+            <h2><span class="icon">🤖</span> Agents</h2>
+            <div class="component-grid">
+                <div class="card agent">
+                    <h3>🔍 vb6-analyst</h3>
+                    <p>Analyzes VB6 codebase, extracts forms, modules, dependencies, and generates comprehensive
+                        documentation.</p>
+                    <span class="badge badge-purple">Phase 1</span>
+                </div>
+                <div class="card agent">
+                    <h3>⚙️ backend-architect</h3>
+                    <p>Generates Prisma schema, DTOs, Services, Controllers, Routes, and Swagger API specification.</p>
+                    <span class="badge badge-purple">Phase 2</span>
+                </div>
+                <div class="card agent">
+                    <h3>🎨 angular-architect</h3>
+                    <p>Creates ZONELESS Angular components with Signals, OnPush, Standalone architecture. v4.0</p>
+                    <span class="badge badge-purple">Phase 3</span>
+                </div>
+                <div class="card agent">
+                    <h3>🧪 testing-verifier</h3>
+                    <p>Self-healing testing agent. Generates E2E + Unit tests, auto-repairs failures. v2.0</p>
+                    <span class="badge badge-purple">Phase 4</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="workflows">
+            <h2><span class="icon">⚡</span> Workflows</h2>
+            <div class="component-grid">
+                <div class="card workflow">
+                    <h3>📝 audit-legacy</h3>
+                    <p>Deep analysis of VB6 codebase. Produces 8 documentation artifacts.</p>
+                    <span class="badge badge-green">FULLY AUTOMATED</span>
+                </div>
+                <div class="card workflow">
+                    <h3>🗄️ migrate-db</h3>
+                    <p>Exports Access data and imports it into SQLite via Prisma.</p>
+                    <span class="badge badge-green">ALL TABLES</span>
+                </div>
+                <div class="card workflow">
+                    <h3>🖼️ migrate-ui</h3>
+                    <p>Migrates ALL VB6 Forms to Angular Components.</p>
+                    <span class="badge badge-green">COMPLETE MIGRATION</span>
+                </div>
+                <div class="card workflow">
+                    <h3>🎯 orchestrate-migration</h3>
+                    <p>Master workflow. 5 phases with self-healing test loop. v5.0</p>
+                    <span class="badge badge-green">SELF-HEALING</span>
+                </div>
+                <div class="card workflow">
+                    <h3>✅ verify-e2e</h3>
+                    <p>Run automated E2E tests to verify migrated Angular app.</p>
+                    <span class="badge badge-green">PLAYWRIGHT</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2><span class="icon">🛠️</span> Skills</h2>
+            <div class="component-grid">
+                <div class="card skill">
+                    <h3>🔓 legacy-decoding</h3>
+                    <p>Expert techniques for parsing VB6 artifacts with migration-oriented analysis.</p>
+                    <span class="badge badge-orange">VB6 PARSING</span>
+                </div>
+                <div class="card skill">
+                    <h3>🗃️ db-transform</h3>
+                    <p>Techniques for migrating Access Databases to SQLite.</p>
+                    <span class="badge badge-orange">ACCESS → SQLITE</span>
+                </div>
+                <div class="card skill">
+                    <h3>🏗️ modern-stack</h3>
+                    <p>Angular 21 + Node 24 + Express 5 + Prisma specifications. ZONELESS mode.</p>
+                    <span class="badge badge-orange">v3.0 ZONELESS</span>
+                </div>
+                <div class="card skill">
+                    <h3>🧪 e2e-verification</h3>
+                    <p>Generic E2E testing framework. Generates Playwright tests from VB6 flows.</p>
+                    <span class="badge badge-orange">PLAYWRIGHT</span>
+                </div>
+                <div class="card skill">
+                    <h3>✅ quality-gates</h3>
+                    <p>Validation rules, Jest testing, coverage enforcement, self-healing.</p>
+                    <span class="badge badge-orange">SELF-HEALING</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="scripts">
+            <h2><span class="icon">📜</span> Scripts (13 Total)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Script</th>
+                        <th>Location</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>vb6_comprehensive_scanner.py</td>
+                        <td>.agent/scripts/</td>
+                        <td>Full inventory scan</td>
+                    </tr>
+                    <tr>
+                        <td>vb6_metrics_analyzer.py</td>
+                        <td>.agent/scripts/</td>
+                        <td>Code metrics analysis</td>
+                    </tr>
+                    <tr>
+                        <td>vb6_dead_code_detector.py</td>
+                        <td>.agent/scripts/</td>
+                        <td>Find unused code</td>
+                    </tr>
+                    <tr>
+                        <td>vb6_dependency_graph.py</td>
+                        <td>.agent/scripts/</td>
+                        <td>Dependency visualization</td>
+                    </tr>
+                    <tr>
+                        <td>vb6_hardcoded_extractor.py</td>
+                        <td>.agent/scripts/</td>
+                        <td>Extract hardcoded values</td>
+                    </tr>
+                    <tr>
+                        <td>vb6_schema_extractor.py</td>
+                        <td>.agent/scripts/</td>
+                        <td>Database schema extraction</td>
+                    </tr>
+                    <tr>
+                        <td>html_report_generator.py</td>
+                        <td>.agent/scripts/</td>
+                        <td>Generate HTML reports</td>
+                    </tr>
+                    <tr>
+                        <td>generate_e2e_specs.py</td>
+                        <td>e2e-verification/scripts/</td>
+                        <td>Generate Playwright tests</td>
+                    </tr>
+                    <tr>
+                        <td>vb6_flow_analyzer.py</td>
+                        <td>e2e-verification/scripts/</td>
+                        <td>Analyze VB6 user flows</td>
+                    </tr>
+                    <tr>
+                        <td>generate_jest_specs.py</td>
+                        <td>quality-gates/scripts/</td>
+                        <td>Generate Jest unit tests</td>
+                    </tr>
+                    <tr>
+                        <td>coverage_validator.py</td>
+                        <td>quality-gates/scripts/</td>
+                        <td>Validate test coverage</td>
+                    </tr>
+                    <tr>
+                        <td>test_failure_analyzer.py</td>
+                        <td>quality-gates/scripts/</td>
+                        <td>Parse and fix test failures</td>
+                    </tr>
+                    <tr>
+                        <td>repair_report_generator.py</td>
+                        <td>quality-gates/scripts/</td>
+                        <td>Generate repair HTML report</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="rules">
+            <h2><span class="icon">📋</span> Migration Rules v3.0</h2>
+            <div class="component-grid">
+                <div class="card rule">
+                    <h3>🏗️ Architecture</h3>
+                    <p>Standalone Components, Signals, OnPush, ZONELESS</p>
+                </div>
+                <div class="card rule">
+                    <h3>🔒 Security</h3>
+                    <p>No innerHTML, no eval, parameterized queries</p>
+                </div>
+                <div class="card rule">
+                    <h3>📝 Naming</h3>
+                    <p>kebab-case files, PascalCase classes, camelCase methods</p>
+                </div>
+                <div class="card rule">
+                    <h3>🚫 Prohibited</h3>
+                    <p>Zone.js, NgModules, any type, nested callbacks</p>
+                </div>
+                <div class="card rule">
+                    <h3>✅ Required</h3>
+                    <p>80% coverage, 0 lint errors, E2E all flows</p>
+                </div>
+                <div class="card rule">
+                    <h3>📊 Quality</h3>
+                    <p>SonarQube A rating, <3% duplication</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="vulnerabilities">
+            <h2><span class="icon">⚠️</span> Vulnerabilities & Improvements</h2>
+
+            <div class="vuln-card">
+                <h4>🔴 CRITICAL: No Rollback Mechanism</h4>
+                <p>If migration fails mid-process, there's no automatic way to revert changes.</p>
+                <p class="solution">✅ Solution: Add Git commit checkpoints after each phase. Create rollback-migration
+                    workflow.</p>
+            </div>
+
+            <div class="vuln-card">
+                <h4>🔴 CRITICAL: No Validation Between Phases</h4>
+                <p>Backend might generate invalid schema that breaks frontend generation.</p>
+                <p class="solution">✅ Solution: Add inter-phase validation gates. Run smoke tests before proceeding.</p>
+            </div>
+
+            <div class="vuln-card">
+                <h4>🟠 HIGH: Limited Error Pattern Recognition</h4>
+                <p>test_failure_analyzer.py only recognizes ~10 error patterns.</p>
+                <p class="solution">✅ Solution: Add ML-based pattern matching or expand to 50+ patterns. Add custom
+                    pattern config.</p>
+            </div>
+
+            <div class="vuln-card">
+                <h4>🟠 HIGH: No Incremental Migration</h4>
+                <p>Currently all-or-nothing approach. Can't migrate one module at a time.</p>
+                <p class="solution">✅ Solution: Add --modules flag to orchestrate-migration for selective migration.</p>
+            </div>
+
+            <div class="vuln-card">
+                <h4>🟡 MEDIUM: No Progress Persistence</h4>
+                <p>If process crashes, must restart from beginning.</p>
+                <p class="solution">✅ Solution: Add state.json checkpoint file. Resume from last completed phase.</p>
+            </div>
+
+            <div class="vuln-card">
+                <h4>🟡 MEDIUM: No Parallel Processing</h4>
+                <p>Scripts run sequentially, not utilizing multi-core CPUs.</p>
+                <p class="solution">✅ Solution: Use Python multiprocessing in scanners. Parallel component generation.
+                </p>
+            </div>
+
+            <div class="vuln-card">
+                <h4>🟡 MEDIUM: Missing Data Validation Agent</h4>
+                <p>No agent validates migrated data matches original Access DB.</p>
+                <p class="solution">✅ Solution: Add data-validator agent with row count, checksum comparison.</p>
+            </div>
+
+            <div class="vuln-card">
+                <h4>⚪ LOW: No Dry-Run Mode</h4>
+                <p>Can't preview what migration will do without executing it.</p>
+                <p class="solution">✅ Solution: Add --dry-run flag that outputs plan without making changes.</p>
+            </div>
+        </section>
+
+        <section id="dependencies">
+            <h2><span class="icon">🔗</span> Component Dependencies</h2>
+            <div id="dependency-diagram"></div>
+        </section>
+    </div>
+
+    <footer>
+        <p>VB6 to Angular Migration System • v5.0 Self-Healing • Generated: <span id="timestamp"></span></p>
+        <p>Built with D3.js • Fully Automated • Zero Human Intervention Required</p>
+    </footer>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Flow Diagram
+        const flowData = {
+            nodes: [
+                { id: 'start', label: '🚀 Start', x: 100, y: 250 },
+                { id: 'phase1', label: '📊 Phase 1\nAnalysis', x: 250, y: 250 },
+                { id: 'phase2', label: '⚙️ Phase 2\nBackend', x: 400, y: 250 },
+                { id: 'phase3', label: '🎨 Phase 3\nFrontend', x: 550, y: 250 },
+                { id: 'phase4', label: '🧪 Phase 4\nTesting', x: 700, y: 250 },
+                { id: 'check', label: '✓ Pass?', x: 850, y: 250 },
+                { id: 'analyze', label: '🔍 Analyze', x: 850, y: 380 },
+                { id: 'fix', label: '🔧 Auto-Fix', x: 700, y: 380 },
+                { id: 'phase5', label: '📋 Phase 5\nReports', x: 1000, y: 250 },
+                { id: 'end', label: '✅ Done', x: 1150, y: 250 }
+            ],
+            links: [
+                { source: 'start', target: 'phase1' },
+                { source: 'phase1', target: 'phase2' },
+                { source: 'phase2', target: 'phase3' },
+                { source: 'phase3', target: 'phase4' },
+                { source: 'phase4', target: 'check' },
+                { source: 'check', target: 'phase5', label: 'YES' },
+                { source: 'check', target: 'analyze', label: 'NO' },
+                { source: 'analyze', target: 'fix' },
+                { source: 'fix', target: 'phase4' },
+                { source: 'phase5', target: 'end' }
+            ]
+        };
+
+        const flowSvg = d3.select('#flow-diagram').append('svg')
+            .attr('width', '100%').attr('height', '100%')
+            .attr('viewBox', '0 0 1250 500');
+
+        flowSvg.append('defs').append('marker')
+            .attr('id', 'arrowhead').attr('viewBox', '-0 -5 10 10')
+            .attr('refX', 20).attr('refY', 0).attr('orient', 'auto')
+            .attr('markerWidth', 6).attr('markerHeight', 6)
+            .append('path').attr('d', 'M 0,-5 L 10,0 L 0,5').attr('fill', '#3b82f6');
+
+        flowSvg.selectAll('line').data(flowData.links).enter().append('line')
+            .attr('x1', d => flowData.nodes.find(n => n.id === d.source).x)
+            .attr('y1', d => flowData.nodes.find(n => n.id === d.source).y)
+            .attr('x2', d => flowData.nodes.find(n => n.id === d.target).x)
+            .attr('y2', d => flowData.nodes.find(n => n.id === d.target).y)
+            .attr('stroke', '#3b82f6').attr('stroke-width', 2).attr('marker-end', 'url(#arrowhead)');
+
+        flowSvg.selectAll('rect').data(flowData.nodes).enter().append('rect')
+            .attr('x', d => d.x - 50).attr('y', d => d.y - 30)
+            .attr('width', 100).attr('height', 60).attr('rx', 10)
+            .attr('fill', '#334155').attr('stroke', '#3b82f6').attr('stroke-width', 2);
+
+        flowSvg.selectAll('text.node').data(flowData.nodes).enter().append('text')
+            .attr('x', d => d.x).attr('y', d => d.y)
+            .attr('text-anchor', 'middle').attr('fill', '#f1f5f9').attr('font-size', '12')
+            .each(function (d) {
+                const lines = d.label.split('\n');
+                d3.select(this).selectAll('tspan').data(lines).enter().append('tspan')
+                    .attr('x', d.x).attr('dy', (l, i) => i === 0 ? '-0.3em' : '1.2em').text(l => l);
+            });
+
+        // Dependency Diagram
+        const depData = {
+            nodes: [
+                { id: 'orchestrate', group: 1 },
+                { id: 'vb6-analyst', group: 2 },
+                { id: 'backend-architect', group: 2 },
+                { id: 'angular-architect', group: 2 },
+                { id: 'testing-verifier', group: 2 },
+                { id: 'legacy-decoding', group: 3 },
+                { id: 'modern-stack', group: 3 },
+                { id: 'quality-gates', group: 3 },
+                { id: 'e2e-verification', group: 3 },
+                { id: 'db-transform', group: 3 }
+            ],
+            links: [
+                { source: 'orchestrate', target: 'vb6-analyst' },
+                { source: 'orchestrate', target: 'backend-architect' },
+                { source: 'orchestrate', target: 'angular-architect' },
+                { source: 'orchestrate', target: 'testing-verifier' },
+                { source: 'vb6-analyst', target: 'legacy-decoding' },
+                { source: 'backend-architect', target: 'db-transform' },
+                { source: 'backend-architect', target: 'modern-stack' },
+                { source: 'angular-architect', target: 'modern-stack' },
+                { source: 'testing-verifier', target: 'quality-gates' },
+                { source: 'testing-verifier', target: 'e2e-verification' }
+            ]
+        };
+
+        const depSvg = d3.select('#dependency-diagram').append('svg')
+            .attr('width', '100%').attr('height', '100%');
+
+        const simulation = d3.forceSimulation(depData.nodes)
+            .force('link', d3.forceLink(depData.links).id(d => d.id).distance(120))
+            .force('charge', d3.forceManyBody().strength(-400))
+            .force('center', d3.forceCenter(600, 250));
+
+        const link = depSvg.append('g').selectAll('line').data(depData.links).enter().append('line')
+            .attr('stroke', '#3b82f6').attr('stroke-width', 2);
+
+        const node = depSvg.append('g').selectAll('g').data(depData.nodes).enter().append('g');
+
+        node.append('circle').attr('r', 25)
+            .attr('fill', d => d.group === 1 ? '#8b5cf6' : d.group === 2 ? '#10b981' : '#f59e0b');
+
+        node.append('text').text(d => d.id.split('-')[0])
+            .attr('text-anchor', 'middle').attr('dy', 4).attr('fill', '#fff').attr('font-size', '10');
+
+        simulation.on('tick', () => {
+            link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+            node.attr('transform', d => `translate(${d.x},${d.y})`);
+        });
+    </script>
+</body>
+
+</html>
