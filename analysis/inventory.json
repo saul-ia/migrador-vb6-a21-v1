@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "scan_date": "2026-02-05T23:25:19.284461",
+    "scan_date": "2026-02-10T12:24:46.006355",
     "source_directory": "vb6-apps\\Biblioteca",
     "scanner_version": "2.0.0"
   },
@@ -2746,15 +2746,15 @@
   ],
   "call_graph": {
     "nodes": [
-      "FrmPres",
       "Module1",
       "FRMLIB",
-      "FORM7",
-      "frmAYUDA",
       "Form1",
-      "FRMCLI",
       "MDIForm1",
-      "Form2"
+      "Form2",
+      "FORM7",
+      "FRMCLI",
+      "frmAYUDA",
+      "FrmPres"
     ],
     "edges": []
   },

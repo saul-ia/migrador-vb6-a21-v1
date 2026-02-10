@@ -1,49 +1,16 @@
 import os
 import json
-import re
 import argparse
-import datetime
 from pathlib import Path
-
-def generate_report(project_dir, analysis_dir, output_file):
-    """
-    Generates a modern, interactive HTML report for the migration process.
-    """
-    project_path = Path(project_dir)
-    analysis_path = Path(analysis_dir)
-    agent_dir = project_path / ".agent"
-    
-    # 1. Gather Data
-    agents = scan_agents(agent_dir / "agents")
-    skills = scan_skills(agent_dir / "skills")
-    workflows = scan_workflows(agent_dir / "workflows")
-    rules = scan_rules(agent_dir / "rules" / "MIGRATION_RULES.md")
-    compliance = verify_compliance(project_path, rules)
-    
-    # 2. Generate HTML
-    html = build_html(agents, skills, workflows, rules, compliance)
-    
-    # 3. Write Output
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(html)
-    
-    print(f"✅ Report generated: {output_file}")
+from datetime import datetime
 
 def scan_agents(agents_dir):
-    data = []
-    if not agents_dir.exists(): return data
-    for f in agents_dir.glob("*.md"):
-        content = f.read_text(encoding='utf-8')
-        model = re.search(r'model:\s*(.+)', content)
-        desc = re.search(r'description:\s*(.+)', content)
-        data.append({
-            "name": f.stem,
-            "model": model.group(1).strip() if model else "Unknown",
-            "description": desc.group(1).strip() if desc else "No objective defined",
-            "type": "Agent"
-        })
-    return data
+    agents = []
+    if not os.path.exists(agents_dir): return agents
+    for f in os.listdir(agents_dir):
+        if f.endswith(".md"):
+            agents.append({"name": f.replace(".md", ""), "path": str(agents_dir / f)})
+    return agents
 
 def scan_skills(skills_dir):
     data = []
