@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "scan_date": "2026-02-10T12:24:46.006355",
+    "scan_date": "2026-02-10T13:10:20.551318",
     "source_directory": "vb6-apps\\Biblioteca",
     "scanner_version": "2.0.0"
   },
   "summary": {
-    "total_files": 123,
-    "total_size_bytes": 2125179,
-    "total_size_human": "2.0 MB",
+    "total_files": 124,
+    "total_size_bytes": 2180624,
+    "total_size_human": "2.1 MB",
     "projects_count": 1,
     "forms_count": 8,
     "modules_count": 1,
@@ -38,8 +38,16 @@
     "unknown": {
       "description": "Unknown",
       "icon": "❓",
-      "count": 29,
+      "count": 30,
       "files": [
+        {
+          "name": ".vb6_scanner_cache.json",
+          "path": "vb6-apps\\Biblioteca\\.vb6_scanner_cache.json",
+          "relative_path": ".vb6_scanner_cache.json",
+          "extension": ".json",
+          "size_bytes": 55445,
+          "category": "unknown"
+        },
         {
           "name": "Biblio.htm",
           "path": "vb6-apps\\Biblioteca\\Biblio.htm",
@@ -2746,15 +2754,15 @@
   ],
   "call_graph": {
     "nodes": [
-      "Module1",
       "FRMLIB",
-      "Form1",
+      "FrmPres",
+      "Module1",
       "MDIForm1",
-      "Form2",
-      "FORM7",
       "FRMCLI",
+      "FORM7",
+      "Form1",
       "frmAYUDA",
-      "FrmPres"
+      "Form2"
     ],
     "edges": []
   },

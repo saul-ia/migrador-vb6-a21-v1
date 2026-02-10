@@ -1,8 +1,10 @@
 # Generated Artifacts
-angular-app/
+angular-app-v1/
 angular-app-v2/
 angular-app-v3/
-migration-control-center/
+angular-app-v4/
+analysis/
+coverage/ol-center/
 temp/
 vb6-apps/
 
