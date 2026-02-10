@@ -1,0 +1,113 @@
+<div class="dashboard-container">
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="logo">
+            <span class="icon">📚</span>
+            <h1>Biblioteca</h1>
+        </div>
+        <nav class="nav-menu">
+            <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+            <a routerLink="/clientes" routerLinkActive="active">Clientes</a>
+            <a routerLink="/libros" routerLinkActive="active">Libros</a>
+            <a routerLink="/prestamos" routerLinkActive="active">Préstamos</a>
+        </nav>
+        <button class="logout-btn" (click)="logout()">
+            🚪 Salir
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        @if (loading()) {
+        <div class="loading-spinner">
+            <div class="spinner-large"></div>
+            <p>Cargando...</p>
+        </div>
+        } @else {
+        <!-- Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card total">
+                <div class="stat-icon">📖</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats()?.total || 0 }}</span>
+                    <span class="stat-label">Total Libros</span>
+                </div>
+            </div>
+
+            <div class="stat-card available">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats()?.disponibles || 0 }}</span>
+                    <span class="stat-label">Disponibles</span>
+                </div>
+            </div>
+
+            <div class="stat-card loaned">
+                <div class="stat-icon">📤</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats()?.prestados || 0 }}</span>
+                    <span class="stat-label">Prestados</span>
+                </div>
+            </div>
+
+            <div class="stat-card overdue">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats()?.vencidos || 0 }}</span>
+                    <span class="stat-label">Vencidos</span>
+                </div>
+            </div>
+
+            <div class="stat-card clients">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ totalClientes() }}</span>
+                    <span class="stat-label">Clientes</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <h2>Acciones Rápidas</h2>
+            <div class="actions-grid">
+                <a routerLink="/prestamos/nuevo" class="action-card">
+                    <span class="action-icon">📤</span>
+                    <span>Nuevo Préstamo</span>
+                </a>
+                <a routerLink="/libros/nuevo" class="action-card">
+                    <span class="action-icon">📖</span>
+                    <span>Agregar Libro</span>
+                </a>
+                <a routerLink="/clientes/nuevo" class="action-card">
+                    <span class="action-icon">👤</span>
+                    <span>Nuevo Cliente</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Overdue Books Alert -->
+        @if (overdueBooks().length > 0) {
+        <section class="overdue-section">
+            <h2>⚠️ Libros Vencidos</h2>
+            <div class="overdue-list">
+                @for (libro of overdueBooks(); track libro.id) {
+                <div class="overdue-item">
+                    <div class="book-info">
+                        <strong>{{ libro.titulo }}</strong>
+                        <span class="author">{{ libro.autor }}</span>
+                    </div>
+                    <div class="borrower-info">
+                        <span>{{ libro.socio?.nombres }} {{ libro.socio?.apellidos }}</span>
+                    </div>
+                    <div class="due-date">
+                        Venció: {{ libro.fecDev | date:'dd/MM/yyyy' }}
+                    </div>
+                </div>
+                }
+            </div>
+        </section>
+        }
+        }
+    </main>
+</div>

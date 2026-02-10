@@ -378,7 +378,77 @@ Output:
 
 ---
 
-## 7. Integration with CI/CD
+## 7. Unit Test Generator 🧪
+
+### Purpose
+Automatically generate Jest test skeletons for components, services, and controllers. Reduces manual test writing effort and ensures 80%+ coverage baseline.
+
+### Usage
+
+```bash
+# Generate all tests (frontend + backend)
+python .agent/skills/quality-gates/scripts/unit_test_generator.py \
+  --input ${OUTPUT_DIR} \
+  --type all \
+  --coverage-threshold 80
+
+# Frontend only
+python .agent/skills/quality-gates/scripts/unit_test_generator.py \
+  --input ${OUTPUT_DIR} \
+  --type frontend
+
+# Backend only
+python .agent/skills/quality-gates/scripts/unit_test_generator.py \
+  --input ${OUTPUT_DIR} \
+  --type backend
+```
+
+### What It Generates
+
+**For Angular Components:**
+- TestBed configuration with mock providers
+- Basic creation test
+- Tests for public methods
+- Lifecycle hook tests (ngOnInit, etc.)
+
+**For Angular Services:**
+- Mock HttpClient spy
+- Dependency injection mocks
+- Tests for all public methods
+- Proper async/await handling
+
+**For Express Controllers:**
+- Mock request/response objects
+- Tests for all route handlers
+- Status code assertions
+- Basic validation tests
+
+### Output
+
+Generates `*.spec.ts` files alongside source files:
+```
+src/
+  app/
+    components/
+      users/
+        users.component.ts
+        users.component.spec.ts  ← Generated
+    services/
+      auth/
+        auth.service.ts
+        auth.service.spec.ts     ← Generated
+```
+
+### After Generation
+
+1. Run tests: `npm test`
+2. Check coverage: `npm test -- --coverage`
+3. Refine test assertions as needed
+4. Add edge case tests manually
+
+---
+
+## 8. Integration with CI/CD
 
 ### GitHub Actions Example
 ```yaml
@@ -403,9 +473,7 @@ jobs:
       - name: Run unit tests
         run: npm test -- --coverage
         
-      - name: Run E2E tests
-        run: npx playwright test
-        
+
       - name: Validate coverage
         run: |
           python .agent/skills/quality-gates/scripts/coverage_validator.py \

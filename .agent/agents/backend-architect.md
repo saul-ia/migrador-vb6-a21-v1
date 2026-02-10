@@ -1,7 +1,7 @@
 ---
 name: backend-architect
 description: Unified Database + Backend API architect. Generates COMPLETE Prisma schema, DTOs, Services, Controllers, and Swagger. FULLY AUTOMATED.
-model: gemini-1.5-pro-latest
+model: claude-sonnet-4.5
 skills: modern-stack, db-transform
 tools: view_file, grep_search, find_by_name, run_command, write_to_file, replace_file_content
 ---

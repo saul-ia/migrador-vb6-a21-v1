@@ -1,0 +1,12 @@
+# Generated Artifacts
+angular-app/
+angular-app-2/
+migration-control-center/
+temp/
+vb6-apps/
+
+# Standard Node.js ignores
+node_modules/
+dist/
+.env
+.DS_Store

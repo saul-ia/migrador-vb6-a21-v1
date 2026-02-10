@@ -1,0 +1,25 @@
+<div class="page-container">
+    <header class="page-header">
+        <h1>❓ Ayuda</h1>
+        <p class="subtitle">Guía de uso del Sistema de Biblioteca</p>
+    </header>
+
+    <main class="help-content">
+        @for (section of sections; track section.title) {
+        <div class="help-section">
+            <h2>{{ section.title }}</h2>
+            <ul>
+                @for (item of section.items; track item) {
+                <li>{{ item }}</li>
+                }
+            </ul>
+        </div>
+        }
+
+        <div class="help-section contact">
+            <h2>📞 Soporte</h2>
+            <p>Para asistencia técnica, contacte al administrador del sistema.</p>
+            <p class="version">Versión 2.0 - Migrado desde VB6</p>
+        </div>
+    </main>
+</div>

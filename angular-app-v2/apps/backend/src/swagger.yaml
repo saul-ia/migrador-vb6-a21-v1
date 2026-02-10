@@ -1,0 +1,538 @@
+openapi: 3.0.3
+info:
+  title: Biblioteca API
+  description: REST API for Biblioteca - Migrated from VB6 + Access
+  version: 1.0.0
+  contact:
+    name: Migration Team
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+tags:
+  - name: Claves
+    description: Authentication/Password management
+  - name: Clientes
+    description: Client/Member management
+  - name: Libros
+    description: Book and Loan management
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+
+  # ==================== CLAVES ====================
+  /api/claves:
+    get:
+      tags: [Claves]
+      summary: Get all passwords
+      responses:
+        '200':
+          description: List of passwords
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Clave'
+    post:
+      tags: [Claves]
+      summary: Create password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClaveCreate'
+      responses:
+        '201':
+          description: Password created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clave'
+
+  /api/claves/validate:
+    post:
+      tags: [Claves]
+      summary: Validate password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pass:
+                  type: string
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+
+  /api/claves/{id}:
+    get:
+      tags: [Claves]
+      summary: Get password by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Password found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clave'
+        '404':
+          description: Not found
+    put:
+      tags: [Claves]
+      summary: Update password
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClaveCreate'
+      responses:
+        '200':
+          description: Password updated
+    delete:
+      tags: [Claves]
+      summary: Delete password
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted
+
+  # ==================== CLIENTES ====================
+  /api/clientes:
+    get:
+      tags: [Clientes]
+      summary: Get all clients
+      parameters:
+        - name: includeLibros
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+    post:
+      tags: [Clientes]
+      summary: Create client
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteCreate'
+      responses:
+        '201':
+          description: Client created
+
+  /api/clientes/search:
+    get:
+      tags: [Clientes]
+      summary: Search clients
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Search results
+
+  /api/clientes/count:
+    get:
+      tags: [Clientes]
+      summary: Get client count
+      responses:
+        '200':
+          description: Count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+
+  /api/clientes/{id}:
+    get:
+      tags: [Clientes]
+      summary: Get client by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: includeLibros
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Client found
+        '404':
+          description: Not found
+    put:
+      tags: [Clientes]
+      summary: Update client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteUpdate'
+      responses:
+        '200':
+          description: Updated
+    delete:
+      tags: [Clientes]
+      summary: Delete client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          description: Cannot delete (has active loans)
+
+  # ==================== LIBROS ====================
+  /api/libros:
+    get:
+      tags: [Libros]
+      summary: Get all books
+      parameters:
+        - name: includeSocio
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of books
+    post:
+      tags: [Libros]
+      summary: Create book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibroCreate'
+      responses:
+        '201':
+          description: Book created
+
+  /api/libros/search:
+    get:
+      tags: [Libros]
+      summary: Search books
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Search results
+
+  /api/libros/available:
+    get:
+      tags: [Libros]
+      summary: Get available books
+      responses:
+        '200':
+          description: Available books
+
+  /api/libros/loaned:
+    get:
+      tags: [Libros]
+      summary: Get loaned books
+      responses:
+        '200':
+          description: Loaned books
+
+  /api/libros/overdue:
+    get:
+      tags: [Libros]
+      summary: Get overdue books
+      responses:
+        '200':
+          description: Overdue books
+
+  /api/libros/stats:
+    get:
+      tags: [Libros]
+      summary: Get book statistics
+      responses:
+        '200':
+          description: Statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  disponibles:
+                    type: integer
+                  prestados:
+                    type: integer
+                  vencidos:
+                    type: integer
+
+  /api/libros/prestar:
+    post:
+      tags: [Libros]
+      summary: Loan a book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrestamoCreate'
+      responses:
+        '200':
+          description: Book loaned
+        '400':
+          description: Book already loaned
+
+  /api/libros/{id}:
+    get:
+      tags: [Libros]
+      summary: Get book by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book found
+        '404':
+          description: Not found
+    put:
+      tags: [Libros]
+      summary: Update book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibroUpdate'
+      responses:
+        '200':
+          description: Updated
+    delete:
+      tags: [Libros]
+      summary: Delete book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted
+
+  /api/libros/{id}/devolver:
+    put:
+      tags: [Libros]
+      summary: Return a book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book returned
+
+components:
+  schemas:
+    Clave:
+      type: object
+      properties:
+        id:
+          type: integer
+        pass:
+          type: string
+    ClaveCreate:
+      type: object
+      required: [pass]
+      properties:
+        pass:
+          type: string
+
+    Cliente:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        nroDoc:
+          type: string
+        domicilio:
+          type: string
+        telefono:
+          type: string
+        libros:
+          type: array
+          items:
+            $ref: '#/components/schemas/Libro'
+    ClienteCreate:
+      type: object
+      required: [nombres, apellidos]
+      properties:
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        nroDoc:
+          type: string
+        domicilio:
+          type: string
+        telefono:
+          type: string
+    ClienteUpdate:
+      type: object
+      properties:
+        nombres:
+          type: string
+        apellidos:
+          type: string
+        nroDoc:
+          type: string
+        domicilio:
+          type: string
+        telefono:
+          type: string
+
+    Libro:
+      type: object
+      properties:
+        id:
+          type: integer
+        titulo:
+          type: string
+        autor:
+          type: string
+        estado:
+          type: string
+        dias:
+          type: integer
+        fecPres:
+          type: string
+          format: date-time
+        fecDev:
+          type: string
+          format: date-time
+        socioId:
+          type: integer
+        socio:
+          $ref: '#/components/schemas/Cliente'
+    LibroCreate:
+      type: object
+      required: [titulo]
+      properties:
+        titulo:
+          type: string
+        autor:
+          type: string
+        estado:
+          type: string
+        dias:
+          type: integer
+        socioId:
+          type: integer
+    LibroUpdate:
+      type: object
+      properties:
+        titulo:
+          type: string
+        autor:
+          type: string
+        estado:
+          type: string
+        dias:
+          type: integer
+        socioId:
+          type: integer
+    PrestamoCreate:
+      type: object
+      required: [libroId, socioId, dias]
+      properties:
+        libroId:
+          type: integer
+        socioId:
+          type: integer
+        dias:
+          type: integer

@@ -14,6 +14,9 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
+import hashlib
+
+CACHE_FILE = ".vb6_scanner_cache.json"
 
 # Fix Windows console encoding
 if sys.platform == 'win32':
@@ -170,6 +173,11 @@ class VB6ComprehensiveScanner:
         # Step 1: Discover all files
         self._discover_files()
         
+        # Check cache
+        current_hash = self._calculate_source_hash()
+        if self._load_from_cache(current_hash):
+            return self.analysis
+
         # Step 2: Parse project files first
         self._parse_project_files()
         
@@ -189,7 +197,61 @@ class VB6ComprehensiveScanner:
         # Step 7: Risk assessment
         self._assess_risks()
         
+        # Save cache
+        self._save_to_cache(current_hash)
+        
         return self.analysis
+    
+    def _calculate_source_hash(self):
+        """Calculate a hash of all source files significantly."""
+        hasher = hashlib.md5()
+        # Sort files to ensure deterministic order
+        all_files = []
+        for cat_files in self.files.values():
+            all_files.extend(cat_files)
+        
+        all_files.sort(key=lambda x: x["path"])
+        
+        for f in all_files:
+            # Hash path + size + modified time
+            s = f"{f['name']}{f['size_bytes']}{os.path.getmtime(f['path'])}"
+            hasher.update(s.encode('utf-8'))
+            
+        return hasher.hexdigest()
+
+    def _load_from_cache(self, current_hash):
+        """Try to load analysis from cache."""
+        cache_path = self.source_dir / CACHE_FILE
+        if not cache_path.exists():
+            return False
+            
+        try:
+            with open(cache_path, 'r', encoding='utf-8') as f:
+                cached = json.load(f)
+                
+            if cached.get("source_hash") == current_hash:
+                print(f"⚡ Cache hit! Loaded analysis from {CACHE_FILE}")
+                self.analysis = cached["analysis"]
+                return True
+        except Exception as e:
+            print(f"⚠️ Cache read error: {e}")
+            
+        return False
+
+    def _save_to_cache(self, current_hash):
+        """Save analysis to cache."""
+        try:
+            cache_path = self.source_dir / CACHE_FILE
+            data = {
+                "source_hash": current_hash,
+                "timestamp": datetime.now().isoformat(),
+                "analysis": self.analysis
+            }
+            with open(cache_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False)
+            print(f"💾 Analysis cached to {CACHE_FILE}")
+        except Exception as e:
+            print(f"⚠️ Cache write error: {e}")
     
     def _discover_files(self):
         """Recursively discover all files and categorize them."""

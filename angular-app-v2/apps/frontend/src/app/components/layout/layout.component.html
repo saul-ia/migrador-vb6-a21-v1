@@ -1,0 +1,30 @@
+<div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo">📚</span>
+            <h1>Biblioteca</h1>
+        </div>
+
+        <nav class="sidebar-nav">
+            @for (item of navItems; track item.path) {
+            <a [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+                <span class="nav-icon">{{ item.icon }}</span>
+                <span class="nav-label">{{ item.label }}</span>
+            </a>
+            }
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" (click)="logout()">
+                <span>🚪</span>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <router-outlet />
+    </main>
+</div>

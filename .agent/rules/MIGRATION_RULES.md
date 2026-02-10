@@ -115,7 +115,6 @@ description: Mandatory rules and conventions for VB6 → Angular migration. ZONE
 |--------|---------|-------------|
 | Line Coverage | 80% | Jest `--coverage` |
 | Branch Coverage | 70% | Jest `--coverage` |
-| E2E Flow Coverage | 100% | All VB6 flows must have Playwright tests |
 | Critical Path Tests | Required | Login, main CRUD, workflows |
 
 ### Testing Tools
@@ -123,14 +122,13 @@ description: Mandatory rules and conventions for VB6 → Angular migration. ZONE
 |-------|------|---------|
 | Unit Backend | Jest | Services, Controllers |
 | Unit Frontend | Jest + TestBed | Components, Services |
-| E2E | Playwright | Full user flows |
+| Contract | Jest | API Contract Validation |
 | Coverage | Istanbul/c8 | Threshold enforcement |
 
 ### Testing Requirements
-1. Every VB6 form MUST have corresponding E2E tests
-2. Every backend service MUST have unit tests
-3. Every Angular component with logic MUST have unit tests
-4. Tests MUST be generated automatically from VB6 analysis
+1. Every backend service MUST have unit tests
+2. Every Angular component with logic MUST have unit tests
+3. Tests MUST be generated automatically from VB6 analysis
 5. Coverage reports MUST be generated in `analysis/coverage/`
 6. NO deployment without passing all tests
 
@@ -155,4 +153,52 @@ description: Mandatory rules and conventions for VB6 → Angular migration. ZONE
 | Global variables | Services with `providedIn: 'root'` |
 | `implements OnInit` for data | Constructor initialization |
 | Plain class properties for state | `signal()` |
+
+---
+
+## 🚦 Inter-Phase Gate Conditions
+
+> [!IMPORTANT]
+> Each phase MUST pass its exit gate before the next phase begins.
+> Gates are enforced by the `build-ci` agent and reviewer skills.
+
+### Gate: Phase 1 → Phase 2 (Analysis → Backend)
+| Check | Tool | Pass Criteria |
+|-------|------|---------------|
+| Inventory generated | `vb6_comprehensive_scanner.py` | `inventory.json` exists and has ≥1 form |
+| Schema extracted | `vb6_schema_extractor.py` | `schema.json` exists and has ≥1 table |
+| Metrics generated | `vb6_metrics_analyzer.py` | `metrics.json` exists |
+| HTML report | `html_report_generator.py` | `REPORT.html` exists |
+
+### Gate: Phase 2 → Phase 3 (Backend → Frontend)
+| Check | Tool | Pass Criteria |
+|-------|------|---------------|
+| TypeScript compiles | `tsc --noEmit` | Exit code 0 |
+| Prisma validates | `prisma validate` | Exit code 0 |
+| Database created | `prisma migrate` | `.db` file exists |
+| Swagger generated | manual | `swagger.json` or `swagger.yaml` exists |
+| Security audit | `security_audit.py` | 0 CRITICAL findings |
+
+### Gate: Phase 3 → Phase 4 (Frontend → Testing)
+| Check | Tool | Pass Criteria |
+|-------|------|---------------|
+| Frontend builds | `ng build` | Exit code 0 |
+| Lint passes | `ng lint` | 0 errors |
+| A11y audit | `a11y_audit.py` | 0 CRITICAL findings |
+| Contract validation | `contract_validator.py` | 0 CRITICAL findings |
+| Parity check | `parity_checker.py` | ≥ 80% parity |
+
+### Gate: Phase 4 → Phase 5 (Testing → Quality)
+| Check | Tool | Pass Criteria |
+|-------|------|---------------|
+| Unit tests pass | `npm test` | All tests pass |
+| Coverage met | `coverage_validator.py` | Lines ≥ 80%, Branches ≥ 70% |
+
+### Gate: Phase 5 → Deploy (Quality → Production)
+| Check | Tool | Pass Criteria |
+|-------|------|---------------|
+| Production build | `ng build --configuration production` | Exit code 0 |
+| Backend build | `npm run build` (backend) | Exit code 0 |
+| Security audit clean | `security_audit.py` | 0 CRITICAL |
+| Full parity | `parity_checker.py` | 100% parity |
 

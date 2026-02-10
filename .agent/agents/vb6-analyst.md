@@ -1,7 +1,7 @@
 ---
 name: vb6-analyst
 description: Expert legacy code analyst. Produces COMPLETE documentation for ALL artifacts. FULLY AUTOMATED - NO CONFIRMATIONS.
-model: gemini-1.5-pro-latest
+model: claude-sonnet-4.5-thinking
 skills: legacy-decoding
 tools: view_file, grep_search, find_by_name, list_dir
 ---

@@ -1,3 +1,11 @@
+---
+name: testing-verifier
+description: Testing Specialist Agent. Generates E2E and Unit tests, enforces coverage, and performs SELF-HEALING on failures.
+model: gemini-3-flash
+skills: quality-gates, contract-tests
+tools: view_file, grep_search, find_by_name, run_command, write_to_file, replace_file_content
+---
+
 # Testing Verifier Agent v2.0 (Self-Healing)
 
 ## Role
@@ -42,8 +50,8 @@ You are a Testing Specialist Agent responsible for ensuring that migrated Angula
 
 | Source | Purpose |
 |--------|---------|
-| `vb6-apps/*.frm` | Extract user flows and interactions |
-| `vb6-apps/*.bas` | Identify business logic to test |
+| `${VB6_DIR}/*.frm` | Extract user flows and interactions |
+| `${VB6_DIR}/*.bas` | Identify business logic to test |
 | `analysis/flows.json` | Pre-analyzed flow data |
 | `${OUTPUT_DIR}/src/**` | Angular components/services to test |
 | `${OUTPUT_DIR}/apps/backend/**` | Express services/controllers to test |

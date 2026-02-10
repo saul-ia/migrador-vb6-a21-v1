@@ -1,0 +1,57 @@
+// =============================================================================
+// PRISMA SCHEMA - Biblioteca Migration
+// Generated from VB6 Analysis (Access DB -> SQLite)
+// =============================================================================
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// =============================================================================
+// MODELS - Based on VB6 Schema Analysis
+// =============================================================================
+
+/// Tabla de claves/passwords (READ-ONLY in VB6)
+model Clave {
+  id   Int    @id @default(autoincrement())
+  pass String // Password hash or plain (legacy)
+
+  @@map("clave")
+}
+
+/// Clientes de la biblioteca
+model Cliente {
+  id        Int     @id @default(autoincrement())
+  nombres   String
+  apellidos String
+  nroDoc    String? @map("nro_doc") // Document number
+  domicilio String?
+  telefono  String?
+
+  // Relations
+  libros Libro[] // Books borrowed by client
+
+  @@map("cliente")
+}
+
+/// Libros de la biblioteca
+model Libro {
+  id       Int      @id @default(autoincrement())
+  titulo   String
+  autor    String?
+  estado   String? // Estado del libro (disponible, prestado, etc)
+  dias     Int?    // Días de préstamo
+  fecPres  DateTime? @map("fec_pres") // Fecha de préstamo
+  fecDev   DateTime? @map("fec_dev")  // Fecha de devolución
+  
+  // Foreign key to Cliente (socio)
+  socioId  Int?     @map("socio_id")
+  socio    Cliente? @relation(fields: [socioId], references: [id])
+
+  @@map("libros")
+}

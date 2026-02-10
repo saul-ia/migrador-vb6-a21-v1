@@ -1,7 +1,7 @@
 ---
 name: angular-architect
 description: Frontend architect that generates COMPLETE Angular application from Swagger contract. ALL components generated. FULLY AUTOMATED. ZONELESS.
-model: gemini-1.5-pro-latest
+model: gemini-3-flash
 skills: modern-stack
 tools: view_file, grep_search, find_by_name, run_command, write_to_file, replace_file_content
 ---

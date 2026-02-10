@@ -1,0 +1,134 @@
+<div class="page-container">
+    <header class="page-header">
+        <h1>📤 Préstamos</h1>
+        <button class="primary-btn" (click)="openLoanForm()">
+            ➕ Nuevo Préstamo
+        </button>
+    </header>
+
+    <main class="page-content">
+        @if (loading()) {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Cargando préstamos...</p>
+        </div>
+        } @else {
+        <!-- Active Loans -->
+        <section class="loans-section">
+            <h2>📚 Préstamos Activos ({{ loanedBooks().length }})</h2>
+
+            @if (loanedBooks().length === 0) {
+            <div class="empty-state small">
+                <span>📖</span>
+                <p>No hay préstamos activos</p>
+            </div>
+            } @else {
+            <div class="loans-grid">
+                @for (libro of loanedBooks(); track libro.id) {
+                <div class="loan-card" [class.overdue]="isOverdue(libro)">
+                    <div class="loan-header">
+                        <span class="book-icon">📖</span>
+                        @if (isOverdue(libro)) {
+                        <span class="status-badge overdue">⚠️ VENCIDO</span>
+                        } @else {
+                        <span class="status-badge active">ACTIVO</span>
+                        }
+                    </div>
+
+                    <h3>{{ libro.titulo }}</h3>
+                    <p class="author">{{ libro.autor || 'Autor desconocido' }}</p>
+
+                    <div class="loan-details">
+                        <div class="detail">
+                            <span class="label">👤 Cliente:</span>
+                            <span class="value">{{ libro.socio?.nombres }} {{ libro.socio?.apellidos }}</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">📅 Préstamo:</span>
+                            <span class="value">{{ libro.fecPres | date:'dd/MM/yyyy' }}</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">🔄 Devolución:</span>
+                            <span class="value" [class.overdue-date]="isOverdue(libro)">
+                                {{ libro.fecDev | date:'dd/MM/yyyy' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button class="return-btn" (click)="returnBook(libro.id)">
+                        ↩️ Devolver Libro
+                    </button>
+                </div>
+                }
+            </div>
+            }
+        </section>
+        }
+    </main>
+
+    <!-- Loan Modal -->
+    @if (showLoanForm()) {
+    <div class="modal-overlay" (click)="closeLoanForm()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <header class="modal-header">
+                <h2>📤 Nuevo Préstamo</h2>
+                <button class="close-btn" (click)="closeLoanForm()">✕</button>
+            </header>
+
+            <form (ngSubmit)="createLoan()" class="modal-form">
+                <div class="form-group">
+                    <label>Libro *</label>
+                    <select name="libroId" [ngModel]="selectedLibroId()" (ngModelChange)="selectedLibroId.set($event)"
+                        required>
+                        <option [value]="null" disabled>Seleccione un libro</option>
+                        @for (libro of availableBooks(); track libro.id) {
+                        <option [value]="libro.id">{{ libro.titulo }} - {{ libro.autor }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Cliente *</label>
+                    <select name="clienteId" [ngModel]="selectedClienteId()" (ngModelChange)="onClientSelected($event)"
+                        required>
+                        <option [value]="null" disabled>Seleccione un cliente</option>
+                        @for (cliente of clientes(); track cliente.id) {
+                        <option [value]="cliente.id">{{ cliente.nombres }} {{ cliente.apellidos }}</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- VB6 Feature: Pending loans warning -->
+                @if (showPendingWarning()) {
+                <div class="warning-box">
+                    <span class="warning-icon">⚠️</span>
+                    <div class="warning-content">
+                        <strong>Este socio tiene {{ clientPendingLoans().length }} libro(s) no devuelto(s)</strong>
+                        @if (getOverdueCount() > 0) {
+                        <p class="overdue-note">{{ getOverdueCount() }} con fecha vencida</p>
+                        }
+                    </div>
+                </div>
+                }
+
+                <div class="form-group">
+                    <label>Días de préstamo</label>
+                    <input type="number" name="dias" [ngModel]="dias()" (ngModelChange)="dias.set($event)" min="1"
+                        max="30" />
+                    <small class="hint">Fecha de devolución: {{ returnDate() | date:'dd/MM/yyyy' }}</small>
+                </div>
+
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn" (click)="closeLoanForm()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="primary-btn" [disabled]="!selectedLibroId() || !selectedClienteId()">
+                        Realizar Préstamo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+</div>

@@ -1,0 +1,72 @@
+.page-container {
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+}
+
+.help-content {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 1000px;
+}
+
+.help-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.help-section h2 {
+    color: #fff;
+    font-size: 1.25rem;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.help-section ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.help-section li {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.help-section li:last-child {
+    margin-bottom: 0;
+}
+
+.help-section.contact {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.help-section.contact p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 0.5rem 0;
+}
+
+.version {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 0.85rem;
+    margin-top: 1rem !important;
+}

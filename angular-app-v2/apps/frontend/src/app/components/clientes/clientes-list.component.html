@@ -1,0 +1,126 @@
+<div class="page-container">
+    <header class="page-header">
+        <h1>👥 Clientes</h1>
+        <div class="header-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Buscar cliente..." [ngModel]="searchQuery()"
+                    (ngModelChange)="searchQuery.set($event)" (keyup.enter)="search()" />
+                <button class="search-btn" (click)="search()">🔍</button>
+            </div>
+            <button class="primary-btn" (click)="openCreateForm()">
+                ➕ Nuevo Cliente
+            </button>
+        </div>
+    </header>
+
+    <main class="page-content">
+        @if (loading()) {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Cargando clientes...</p>
+        </div>
+        } @else if (error()) {
+        <div class="error-state">
+            <p>{{ error() }}</p>
+        </div>
+        } @else if (clientes().length === 0) {
+        <div class="empty-state">
+            <span class="empty-icon">👤</span>
+            <p>No hay clientes registrados</p>
+            <button class="primary-btn" (click)="openCreateForm()">
+                Agregar primer cliente
+            </button>
+        </div>
+        } @else {
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Completo</th>
+                        <th>Documento</th>
+                        <th>Domicilio</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (cliente of clientes(); track cliente.id) {
+                    <tr>
+                        <td>{{ cliente.id }}</td>
+                        <td>
+                            <strong>{{ cliente.nombres }} {{ cliente.apellidos }}</strong>
+                        </td>
+                        <td>{{ cliente.nroDoc || '-' }}</td>
+                        <td>{{ cliente.domicilio || '-' }}</td>
+                        <td>{{ cliente.telefono || '-' }}</td>
+                        <td class="actions-cell">
+                            <button class="icon-btn edit" (click)="openEditForm(cliente)">
+                                ✏️
+                            </button>
+                            <button class="icon-btn delete" (click)="deleteCliente(cliente.id)">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </main>
+
+    <!-- Modal Form -->
+    @if (showForm()) {
+    <div class="modal-overlay" (click)="closeForm()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <header class="modal-header">
+                <h2>{{ editingCliente() ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+                <button class="close-btn" (click)="closeForm()">✕</button>
+            </header>
+
+            <form (ngSubmit)="saveCliente()" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombres *</label>
+                        <input type="text" name="nombres" [ngModel]="formNombres()"
+                            (ngModelChange)="formNombres.set($event)" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos *</label>
+                        <input type="text" name="apellidos" [ngModel]="formApellidos()"
+                            (ngModelChange)="formApellidos.set($event)" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nro. Documento</label>
+                    <input type="text" name="nroDoc" [ngModel]="formNroDoc()"
+                        (ngModelChange)="formNroDoc.set($event)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Domicilio</label>
+                    <input type="text" name="domicilio" [ngModel]="formDomicilio()"
+                        (ngModelChange)="formDomicilio.set($event)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" name="telefono" [ngModel]="formTelefono()"
+                        (ngModelChange)="formTelefono.set($event)" />
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn" (click)="closeForm()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="primary-btn">
+                        {{ editingCliente() ? 'Guardar Cambios' : 'Crear Cliente' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+</div>
